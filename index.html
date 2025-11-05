@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Administrativo - Bot WhatsApp</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            max-width: 1600px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+            height: calc(100vh - 40px);
+        }
+
+        /* Sidebar - Lista de chats */
+        .sidebar {
+            width: 350px;
+            background: #f8f9fa;
+            border-right: 2px solid #e9ecef;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .sidebar-header h1 {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .sidebar-controls {
+            padding: 15px;
+            background: white;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 40px 10px 15px;
+            border: 2px solid #ddd;
+            border-radius: 20px;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #25D366;
+            box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .refresh-btn {
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .refresh-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .chats-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .chat-item {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .chat-item:hover {
+            border-color: #25D366;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transform: translateX(5px);
+        }
+
+        .chat-item.active {
+            background: #e8f5e9;
+            border-color: #25D366;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .chat-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .chat-time {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .chat-preview {
+            font-size: 14px;
+            color: #666;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-badge {
+            background: #25D366;
+            color: white;
+            border-radius: 12px;
+            padding: 2px 8px;
+            font-size: 11px;
+            margin-top: 5px;
+            display: inline-block;
+        }
+
+        /* Main area - Chat */
+        .main-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header-area {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .chat-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .pause-btn {
+            padding: 8px 16px;
+            border: 2px solid white;
+            background: transparent;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .pause-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .pause-btn.active {
+            background: #dc3545;
+            border-color: #dc3545;
+        }
+        
+        .pause-btn.active:hover {
+            background: #c82333;
+        }
+
+        .chat-info h2 {
+            font-size: 1.3em;
+            margin-bottom: 5px;
+        }
+
+        .chat-info p {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            display: flex;
+            flex-direction: column;
+            max-width: 70%;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.sent {
+            align-self: flex-end;
+        }
+
+        .message.received {
+            align-self: flex-start;
+        }
+
+        .message-bubble {
+            padding: 12px 16px;
+            border-radius: 18px;
+            word-wrap: break-word;
+            white-space: pre-wrap; /* Preservar saltos de línea y espacios */
+            position: relative;
+        }
+
+        .message.sent .message-bubble {
+            background: #dcf8c6;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.received .message-bubble {
+            background: white;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: #999;
+            margin-top: 5px;
+            padding: 0 5px;
+        }
+
+        .message.sent .message-time {
+            text-align: right;
+        }
+
+        .message-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .chat-input-area {
+            background: white;
+            padding: 20px 30px;
+            border-top: 2px solid #e9ecef;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .input-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .image-btn {
+            padding: 10px 15px;
+            background: #f0f0f0;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s;
+        }
+
+        .image-btn:hover {
+            background: #e0e0e0;
+            transform: scale(1.1);
+        }
+
+        .message-image {
+            margin-bottom: 8px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .message-image img {
+            max-width: 300px;
+            max-height: 300px;
+            width: auto;
+            height: auto;
+            display: block;
+            border-radius: 12px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: none;
+            max-height: 100px;
+            transition: all 0.3s;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #25D366;
+            box-shadow: 0 0 0 3px rgba(37, 211, 102, 0.1);
+        }
+
+        .send-btn {
+            padding: 12px 30px;
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .send-btn:hover {
+            background: #128C7E;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .send-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .empty-state {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .empty-state svg {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 4px solid #dc3545;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border-left: 4px solid #28a745;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 15px;
+            padding: 15px;
+            background: white;
+            border-bottom: 2px solid #e9ecef;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .stat-number {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                height: 100vh;
+                margin: 0;
+                border-radius: 0;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: 40vh;
+            }
+
+            .message {
+                max-width: 85%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar con lista de chats -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h1>💬 Chats</h1>
+                <p>Panel Administrativo</p>
+            </div>
+            
+            <div class="sidebar-controls">
+                <div class="search-box">
+                    <input type="text" id="searchChats" placeholder="Buscar chats...">
+                    <span class="search-icon">🔍</span>
+                </div>
+                <button class="refresh-btn" onclick="cargarChats()">🔄 Actualizar</button>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-number" id="totalChats">0</span>
+                    <span>Chats</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="totalMensajes">0</span>
+                    <span>Mensajes</span>
+                </div>
+            </div>
+
+            <div class="chats-list" id="chatsList">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Cargando chats...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Área principal del chat -->
+        <div class="main-area">
+            <div class="chat-header-area" id="chatHeader">
+                <div class="chat-info">
+                    <h2>Selecciona un chat</h2>
+                    <p>Elige una conversación para comenzar</p>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="empty-state">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                    </svg>
+                    <h3>No hay chat seleccionado</h3>
+                    <p>Selecciona un chat de la lista para ver los mensajes</p>
+                </div>
+            </div>
+
+            <div class="chat-input-area" id="chatInputArea" style="display: none;">
+                <div class="input-actions">
+                    <button class="image-btn" id="imageBtn" onclick="document.getElementById('imageInput').click()" title="Enviar imagen">
+                        📷
+                    </button>
+                    <input type="file" id="imageInput" accept="image/*" style="display: none;" onchange="handleImageSelect(event)">
+                </div>
+                <textarea class="chat-input" id="messageInput" placeholder="Escribe un mensaje..." rows="1"></textarea>
+                <button class="send-btn" id="sendBtn" onclick="enviarMensaje()">
+                    Enviar
+                </button>
+            </div>
+            <div id="imagePreview" style="display: none; padding: 10px; background: #f0f0f0; border-top: 1px solid #ddd;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <img id="previewImg" src="" alt="Vista previa" style="max-width: 100px; max-height: 100px; border-radius: 8px;">
+                    <div style="flex: 1;">
+                        <p style="margin: 0; font-weight: bold;">Imagen seleccionada</p>
+                        <p style="margin: 0; font-size: 12px; color: #666;" id="imageUrlText"></p>
+                    </div>
+                    <button onclick="clearImagePreview()" style="background: #f44336; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer;">✕</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ⚙️ CONFIGURACIÓN - URL del Google Apps Script
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzOhRJsCl6Y71SY7oDmHb5dhHw8oRtwbMLo94Z8RozBgwCz3yGyuf2rLH9nlOGhB_SpJg/exec';
+
+        let chats = [];
+        let chatActual = null;
+        let intervaloActualizacion = null;
+        let ultimoMensajeId = {}; // Track del último mensaje visto por chat
+        window.chatsPausados = {}; // Chats donde el bot está pausado
+
+        // Cargar chats al iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarPausas(); // Cargar estado de pausas
+            cargarChats();
+            
+            // Auto-actualizar cada 5 segundos
+            // NOTA: Cada actualización consume 1-2 llamadas a la URL (20,000 llamadas/día)
+            // Con 5 segundos: ~17,280 llamadas/día (siempre activo) - Aún dentro del límite
+            intervaloActualizacion = setInterval(() => {
+                if (chatActual) {
+                    cargarMensajes(chatActual, true); // true = actualización silenciosa
+                }
+                cargarChats(true); // Actualizar chats también
+            }, 5000); // 5 segundos
+
+            // Buscar chats
+            document.getElementById('searchChats').addEventListener('input', function() {
+                filtrarChats();
+            });
+
+            // Enviar con Enter (Shift+Enter para nueva línea)
+            document.getElementById('messageInput').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    enviarMensaje();
+                }
+            });
+
+            // Auto-resize textarea
+            document.getElementById('messageInput').addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = Math.min(this.scrollHeight, 100) + 'px';
+            });
+        });
+
+        function cargarChats(silencioso = false) {
+            if (SCRIPT_URL === 'TU_URL_DE_GOOGLE_APPS_SCRIPT_AQUI') {
+                if (!silencioso) {
+                    document.getElementById('chatsList').innerHTML = `
+                        <div class="alert alert-error">
+                            ⚠️ Por favor, actualiza la URL del script en la variable SCRIPT_URL del archivo index.html
+                        </div>
+                    `;
+                }
+                return;
+            }
+
+            fetch(SCRIPT_URL + '?action=getChats')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la respuesta del servidor');
+                    }
+                    return response.text(); // Primero obtener como texto
+                })
+                .then(text => {
+                    // Intentar parsear como JSON
+                    let data;
+                    try {
+                        data = JSON.parse(text);
+                    } catch (e) {
+                        // Si no es JSON, podría ser "OK" u otra respuesta
+                        if (text.trim() === 'OK' || text.trim() === '') {
+                            // Si es OK o vacío, asumir que no hay chats
+                            if (!silencioso) {
+                                chats = [];
+                                actualizarEstadisticas();
+                                mostrarChats(chats);
+                            }
+                            return;
+                        }
+                        throw new Error('Respuesta no válida del servidor: ' + text.substring(0, 50));
+                    }
+                    
+                    if (data.chats) {
+                        const hayNuevosChats = JSON.stringify(chats) !== JSON.stringify(data.chats);
+                        chats = data.chats;
+                        actualizarEstadisticas();
+                        
+                        // Si hay un chat seleccionado, verificar si hay nuevos mensajes
+                        if (chatActual && hayNuevosChats) {
+                            const chatActualizado = chats.find(c => c.phone === chatActual);
+                            if (chatActualizado) {
+                                cargarMensajes(chatActual, true);
+                            }
+                        }
+                        
+                        mostrarChats(chats);
+                    } else if (data.error && !silencioso) {
+                        document.getElementById('chatsList').innerHTML = `
+                            <div class="alert alert-error">❌ Error: ${data.error}</div>
+                        `;
+                    } else if (!silencioso) {
+                        // Si no hay error pero tampoco hay chats, asumir que está vacío
+                        chats = [];
+                        actualizarEstadisticas();
+                        mostrarChats(chats);
+                    }
+                })
+                .catch(error => {
+                    if (!silencioso) {
+                        console.error('Error:', error);
+                        document.getElementById('chatsList').innerHTML = `
+                            <div class="alert alert-error">
+                                ❌ Error al conectar con el servidor.<br>
+                                <small>Verifica que el script esté desplegado correctamente.</small><br>
+                                <small>Error: ${error.message}</small>
+                            </div>
+                        `;
+                    }
+                });
+        }
+
+        function actualizarEstadisticas() {
+            const totalChats = chats.length;
+            const totalMensajes = chats.reduce((sum, chat) => sum + (chat.messages?.length || 0), 0);
+            
+            document.getElementById('totalChats').textContent = totalChats;
+            document.getElementById('totalMensajes').textContent = totalMensajes;
+        }
+
+        function mostrarChats(chatsMostrar) {
+            const container = document.getElementById('chatsList');
+
+            if (chatsMostrar.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+                        </svg>
+                        <h3>No hay chats</h3>
+                        <p>Aún no hay conversaciones</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = chatsMostrar.map(chat => {
+                const ultimoMensaje = chat.lastMessage || chat.messages?.[chat.messages.length - 1];
+                const preview = (ultimoMensaje?.body || 'Sin mensajes').toString();
+                const tiempo = formatearTiempo(ultimoMensaje?.received_at || ultimoMensaje?.timestamp);
+                const nombre = (chat.name || chat.phone || 'Sin nombre').toString();
+                const chatPhone = (chat.phone || '').toString();
+                const activo = chatActual && chatActual.toString() === chatPhone ? 'active' : '';
+
+                return `
+                    <div class="chat-item ${activo}" onclick="seleccionarChat('${chatPhone}')">
+                        <div class="chat-header">
+                            <div class="chat-name">${escapeHtml(nombre)}</div>
+                            <div class="chat-time">${tiempo}</div>
+                        </div>
+                        <div class="chat-preview">${escapeHtml(preview.substring(0, 50))}${preview.length > 50 ? '...' : ''}</div>
+                        ${chat.messages?.length > 0 ? `<div class="chat-badge">${chat.messages.length} mensajes</div>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filtrarChats() {
+            const busqueda = document.getElementById('searchChats').value.toLowerCase();
+            const chatsFiltrados = chats.filter(chat => {
+                const nombre = (chat.name || '').toString().toLowerCase();
+                const telefono = (chat.phone || '').toString().toLowerCase();
+                const preview = (chat.lastMessage?.body || '').toString().toLowerCase();
+                return nombre.includes(busqueda) || telefono.includes(busqueda) || preview.includes(busqueda);
+            });
+            mostrarChats(chatsFiltrados);
+        }
+
+        function seleccionarChat(phone) {
+            // Normalizar el teléfono a string para consistencia
+            chatActual = phone.toString();
+            ultimoMensajeId[chatActual] = null; // Resetear para cargar todos los mensajes
+            cargarMensajes(chatActual);
+            filtrarChats(); // Actualizar estado activo
+        }
+
+        function cargarMensajes(phone, silencioso = false) {
+            // Normalizar phone a string para comparación
+            const phoneStr = phone.toString();
+            const chat = chats.find(c => c.phone && c.phone.toString() === phoneStr);
+            if (!chat) {
+                // Si no está en la lista de chats, cargar de todos modos
+                if (!silencioso) {
+                    // Actualizar header
+                    document.getElementById('chatHeader').innerHTML = `
+                        <div class="chat-info">
+                            <h2>${phone}</h2>
+                            <p>${phone}</p>
+                        </div>
+                    `;
+                    document.getElementById('chatInputArea').style.display = 'flex';
+                }
+            } else if (!silencioso) {
+                // Actualizar header solo si no es actualización silenciosa
+                const nombre = chat.name || chat.phone || 'Sin nombre';
+                
+                // Verificar si el bot está pausado para este chat
+                const botPausado = window.chatsPausados && window.chatsPausados[phoneStr];
+                
+                document.getElementById('chatHeader').innerHTML = `
+                    <div class="chat-info">
+                        <h2>${escapeHtml(nombre)}</h2>
+                        <p>${escapeHtml(phoneStr)}</p>
+                    </div>
+                    <div class="chat-actions">
+                        <button class="pause-btn ${botPausado ? 'active' : ''}" onclick="togglePausaBot('${phoneStr}')">
+                            ${botPausado ? '⏸️ Bot Pausado' : '▶️ Bot Activo'}
+                        </button>
+                    </div>
+                `;
+
+                // Mostrar input
+                document.getElementById('chatInputArea').style.display = 'flex';
+            }
+
+            // Cargar mensajes del chat usando getMessages y filtrar por teléfono
+            fetch(SCRIPT_URL + '?action=getMessages')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la respuesta del servidor: ' + response.status);
+                    }
+                    return response.text(); // Primero obtener como texto
+                })
+                .then(text => {
+                    console.log('Respuesta raw para getMessages:', text.substring(0, 500));
+                    
+                    // Intentar parsear como JSON
+                    let data;
+                    try {
+                        data = JSON.parse(text);
+                        console.log('Datos parseados:', data);
+                    } catch (e) {
+                        // Si no es JSON, podría ser "OK" u otra respuesta
+                        console.warn('No se pudo parsear como JSON:', text);
+                        if (text.trim() === 'OK' || text.trim() === '') {
+                            // Si es OK o vacío, asumir que no hay mensajes
+                            if (!silencioso) {
+                                mostrarMensajes([]);
+                            }
+                            return;
+                        }
+                        throw new Error('Respuesta no válida del servidor: ' + text.substring(0, 50));
+                    }
+                    
+                    // Filtrar mensajes del chat específico
+                    if (data.messages && Array.isArray(data.messages) && data.messages.length > 0) {
+                        // Normalizar el teléfono para comparación (convertir a string)
+                        const phoneNormalized = phone.toString();
+                        
+                        // Filtrar mensajes donde el teléfono coincide (tanto recibidos como enviados)
+                        const mensajesChat = data.messages.filter(msg => {
+                            if (!msg) return false;
+                            
+                            // Normalizar teléfonos del mensaje
+                            const msgFrom = (msg.from || '').toString();
+                            const msgTo = (msg.to || '').toString();
+                            
+                            // Mensaje recibido: from coincide con el teléfono
+                            const esRecibido = msgFrom === phoneNormalized;
+                            // Mensaje enviado: to coincide con el teléfono (o from es YO y to coincide)
+                            const esEnviado = (msgFrom === 'YO' && msgTo === phoneNormalized) || 
+                                            (msgTo === phoneNormalized);
+                            
+                            return esRecibido || esEnviado;
+                        });
+                        
+                        console.log(`Total mensajes: ${data.messages.length}, Mensajes del chat ${phone}: ${mensajesChat.length}`);
+                        
+                        if (mensajesChat.length > 0) {
+                            // Ordenar por timestamp (más antiguo primero)
+                            mensajesChat.sort((a, b) => {
+                                const timeA = a.timestamp || (a.received_at ? new Date(a.received_at).getTime() : 0);
+                                const timeB = b.timestamp || (b.received_at ? new Date(b.received_at).getTime() : 0);
+                                return timeA - timeB;
+                            });
+                            
+                            console.log('Estructura del primer mensaje del chat:', mensajesChat[0]);
+                            
+                            // Si no es silencioso (primera carga), siempre mostrar
+                            // Si es silencioso, solo mostrar si hay mensajes nuevos
+                            const ultimoMensaje = mensajesChat[mensajesChat.length - 1];
+                            const ultimoId = ultimoMensaje.id || ultimoMensaje.timestamp || ultimoMensaje.received_at || JSON.stringify(ultimoMensaje);
+                            const hayNuevos = !ultimoMensajeId[phone] || ultimoMensajeId[phone] !== ultimoId;
+                            
+                            console.log('Estado de mensajes:', {
+                                silencioso,
+                                hayNuevos,
+                                ultimoIdGuardado: ultimoMensajeId[phone],
+                                ultimoIdActual: ultimoId
+                            });
+                            
+                            // Siempre mostrar si no es actualización silenciosa o si hay nuevos mensajes
+                            if (!silencioso || hayNuevos) {
+                                ultimoMensajeId[phone] = ultimoId;
+                                mostrarMensajes(mensajesChat);
+                                
+                                // Scroll automático solo si el usuario está al final del chat
+                                const container = document.getElementById('chatMessages');
+                                setTimeout(() => {
+                                    container.scrollTop = container.scrollHeight;
+                                }, 100);
+                            } else {
+                                console.log('No hay mensajes nuevos, omitiendo actualización');
+                            }
+                        } else if (!silencioso) {
+                            console.log('No se encontraron mensajes para este chat');
+                            mostrarMensajes([]);
+                        }
+                    } else if (data.error) {
+                        console.error('Error del servidor:', data.error);
+                        if (!silencioso) {
+                            document.getElementById('chatMessages').innerHTML = `
+                                <div class="alert alert-error">❌ Error: ${data.error}</div>
+                            `;
+                        }
+                    } else {
+                        console.log('No hay mensajes en la respuesta. Estructura de data:', Object.keys(data));
+                        if (!silencioso) {
+                            mostrarMensajes([]);
+                        }
+                    }
+                })
+                .catch(error => {
+                    if (!silencioso) {
+                        console.error('Error completo:', error);
+                        document.getElementById('chatMessages').innerHTML = `
+                            <div class="alert alert-error">
+                                ❌ Error al cargar mensajes: ${error.message}<br>
+                                <small>Abre la consola (F12) para más detalles</small>
+                            </div>
+                        `;
+                    }
+                });
+        }
+
+        function mostrarMensajes(mensajes) {
+            const container = document.getElementById('chatMessages');
+            
+            console.log('mostrarMensajes llamado con:', mensajes?.length || 0, 'mensajes');
+            console.log('Primeros mensajes:', mensajes?.slice(0, 3));
+
+            if (!mensajes || mensajes.length === 0) {
+                console.log('No hay mensajes para mostrar');
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                        </svg>
+                        <h3>No hay mensajes</h3>
+                        <p>Inicia la conversación enviando un mensaje</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Filtrar mensajes nulos o inválidos
+            const mensajesValidos = mensajes.filter(msg => {
+                const esValido = msg && typeof msg === 'object' && (msg.body || msg.text || msg.type);
+                if (!esValido) {
+                    console.warn('Mensaje inválido filtrado:', msg);
+                }
+                return esValido;
+            });
+            
+            console.log(`${mensajesValidos.length} mensajes válidos de ${mensajes.length} totales`);
+
+            if (mensajesValidos.length === 0) {
+                console.log('Todos los mensajes fueron filtrados como inválidos');
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No hay mensajes válidos</h3>
+                        <p>Los mensajes no tienen el formato esperado. Revisa la consola (F12) para más detalles.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = mensajesValidos.map((msg, index) => {
+                // Determinar si es mensaje enviado (por el panel o por el bot automático)
+                // Mensajes enviados tienen: from === 'YO' O status === 'sent' O tienen 'to' pero no 'from' (excepto cuando from es el número del cliente)
+                const tieneFrom = msg.from && msg.from !== '';
+                const tieneTo = msg.to && msg.to !== '';
+                
+                // Determinar si es enviado: más flexible para detectar mensajes del bot
+                const esEnviado = msg.from === 'YO' || 
+                                 msg.from === 'Yo' ||
+                                 msg.status === 'sent' || 
+                                 (tieneTo && !tieneFrom) ||
+                                 (tieneTo && msg.from !== chatActual);
+                
+                const tipo = esEnviado ? 'sent' : 'received';
+                const nombre = esEnviado ? 'Bot' : (msg.name || 'Usuario');
+                
+                // Manejar diferentes formatos de timestamp
+                let timestamp = null;
+                if (msg.received_at) {
+                    timestamp = msg.received_at;
+                } else if (msg.timestamp) {
+                    // Si es número, podría ser segundos o milisegundos
+                    if (typeof msg.timestamp === 'number') {
+                        // Si es menor a 10000000000, probablemente está en segundos
+                        if (msg.timestamp < 10000000000) {
+                            timestamp = new Date(msg.timestamp * 1000).toISOString();
+                        } else {
+                            timestamp = new Date(msg.timestamp).toISOString();
+                        }
+                    } else {
+                        timestamp = msg.timestamp;
+                    }
+                }
+                
+                const tiempo = formatearTiempo(timestamp);
+                
+                // Obtener el cuerpo del mensaje de diferentes formatos posibles
+                let cuerpo = '';
+                if (msg.body) {
+                    cuerpo = msg.body.toString();
+                    
+                    // Solo reemplazar si el body es "[interactive]" literalmente o está vacío
+                    // Si el body ya tiene formato correcto (empieza con 🔘, 📋, etc.), usarlo tal cual
+                    if ((cuerpo === '[interactive]' || cuerpo === '') && msg.type === 'interactive') {
+                        // Intentar extraer información del mensaje interactivo si está disponible
+                        if (msg.interactive) {
+                            if (msg.interactive.type === 'button_reply') {
+                                cuerpo = `🔘 Botón: ${msg.interactive.button_reply?.title || 'Botón presionado'}`;
+                            } else if (msg.interactive.type === 'list_reply') {
+                                cuerpo = `📋 Lista: ${msg.interactive.list_reply?.title || 'Opción seleccionada'}`;
+                            } else {
+                                cuerpo = `📱 Mensaje interactivo (${msg.interactive.type || 'interactivo'})`;
+                            }
+                        } else {
+                            cuerpo = '📱 [Mensaje interactivo - Botón o lista presionado]';
+                        }
+                    }
+                    // Si el body ya tiene contenido válido (viene del Sheet), usarlo tal cual
+                } else if (msg.text && typeof msg.text === 'object' && msg.text.body) {
+                    cuerpo = msg.text.body.toString();
+                } else if (msg.text && typeof msg.text === 'string') {
+                    cuerpo = msg.text.toString();
+                } else if (msg.type) {
+                    // Mejorar visualización de otros tipos de mensajes
+                    if (msg.type === 'image') {
+                        cuerpo = '🖼️ [Imagen]';
+                    } else if (msg.type === 'video') {
+                        cuerpo = '🎥 [Video]';
+                    } else if (msg.type === 'audio') {
+                        cuerpo = '🎵 [Audio]';
+                    } else if (msg.type === 'document') {
+                        cuerpo = '📄 [Documento]';
+                    } else if (msg.type === 'location') {
+                        cuerpo = '📍 [Ubicación]';
+                    } else if (msg.type === 'sticker') {
+                        cuerpo = '😊 [Sticker]';
+                    } else {
+                        cuerpo = `[${msg.type}] Mensaje multimedia`;
+                    }
+                } else {
+                    cuerpo = 'Sin contenido';
+                }
+                
+                console.log(`Mensaje ${index + 1}:`, {
+                    from: msg.from,
+                    to: msg.to,
+                    esEnviado,
+                    tipo: msg.type,
+                    cuerpo: cuerpo.substring(0, 30)
+                });
+
+                // Escapar HTML pero preservar saltos de línea
+                const cuerpoEscapado = escapeHtml(cuerpo);
+                
+                // Mostrar imagen si existe media_url
+                let imagenHtml = '';
+                if (msg.type === 'image') {
+                    // Intentar obtener URL de diferentes formas
+                    let imageUrl = '';
+                    
+                    // 1. Desde media_url directamente
+                    if (msg.media_url) {
+                        imageUrl = msg.media_url;
+                    }
+                    // 2. Extraer URL del body si viene en formato "🖼️ [caption] | URL: ..."
+                    else if (typeof msg.body === 'string' && msg.body.includes('| URL:')) {
+                        const urlMatch = msg.body.match(/\| URL: (https?:\/\/[^\s]+)/);
+                        if (urlMatch) {
+                            imageUrl = urlMatch[1];
+                        }
+                    }
+                    
+                    if (imageUrl) {
+                        // Si es base64, usar directamente
+                        if (imageUrl.startsWith('data:image')) {
+                            imagenHtml = `<div class="message-image"><img src="${escapeHtml(imageUrl)}" alt="Imagen" onerror="this.parentElement.innerHTML='<span>Imagen no disponible</span>'"></div>`;
+                        }
+                        // Si es URL HTTP, usar directamente
+                        else if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+                            imagenHtml = `<div class="message-image"><img src="${escapeHtml(imageUrl)}" alt="Imagen" onerror="this.parentElement.innerHTML='<span>Imagen no disponible</span>'"></div>`;
+                        }
+                    }
+                }
+                
+                return `
+                    <div class="message ${tipo}" data-msg-id="${msg.id || msg.timestamp || index}">
+                        ${!esEnviado ? `<div class="message-name">${nombre}</div>` : ''}
+                        ${imagenHtml}
+                        <div class="message-bubble">${cuerpoEscapado}</div>
+                        <div class="message-time">${tiempo}</div>
+                    </div>
+                `;
+            }).join('');
+
+            // Scroll al final solo si hay nuevos mensajes
+            const estaAlFinal = container.scrollHeight - container.scrollTop <= container.clientHeight + 100;
+            if (estaAlFinal) {
+                setTimeout(() => {
+                    container.scrollTop = container.scrollHeight;
+                }, 100);
+            }
+        }
+
+        let selectedImageUrl = null;
+
+        function handleImageSelect(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Convertir imagen a base64
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                selectedImageUrl = e.target.result;
+                document.getElementById('previewImg').src = selectedImageUrl;
+                document.getElementById('imageUrlText').textContent = file.name + ' (' + (file.size / 1024).toFixed(2) + ' KB)';
+                document.getElementById('imagePreview').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearImagePreview() {
+            selectedImageUrl = null;
+            document.getElementById('imageInput').value = '';
+            document.getElementById('imagePreview').style.display = 'none';
+        }
+
+        function enviarMensaje() {
+            const mensaje = document.getElementById('messageInput').value.trim();
+            if ((!mensaje && !selectedImageUrl) || !chatActual) return;
+
+            const btn = document.getElementById('sendBtn');
+            btn.disabled = true;
+            btn.textContent = 'Enviando...';
+
+            // Si hay imagen, usar JSON para evitar límite de URL
+            let fetchOptions;
+            if (selectedImageUrl) {
+                // Enviar como JSON en el cuerpo para evitar límite de URL
+                // Para Google Apps Script, necesitamos enviar como parámetro action también
+                const jsonData = JSON.stringify({
+                    action: 'sendMessage',
+                    to: chatActual,
+                    message: mensaje || '',
+                    imageUrl: selectedImageUrl
+                });
+                
+                fetchOptions = {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: jsonData
+                };
+                
+                // También agregar action como parámetro en la URL para Google Apps Script
+                const urlWithAction = SCRIPT_URL + '?action=sendMessage';
+                fetchOptions.url = urlWithAction;
+            } else {
+                // Para mensajes de texto, usar FormData es más simple
+                const formData = new FormData();
+                formData.append('action', 'sendMessage');
+                formData.append('to', chatActual);
+                formData.append('message', mensaje);
+                fetchOptions = {
+                    method: 'POST',
+                    body: formData
+                };
+            }
+            
+            // Usar la URL con action si existe, sino usar la URL normal
+            const urlToUse = fetchOptions.url || SCRIPT_URL;
+            delete fetchOptions.url; // Remover url del objeto options
+
+            fetch(urlToUse, fetchOptions)
+            .then(response => {
+                console.log('Respuesta recibida:', response.status, response.statusText);
+                if (!response.ok) {
+                    throw new Error(`Error HTTP: ${response.status} ${response.statusText}`);
+                }
+                return response.text(); // Primero obtener como texto
+            })
+            .then(text => {
+                console.log('Texto de respuesta:', text.substring(0, 200));
+                
+                // Intentar parsear como JSON
+                let data;
+                try {
+                    data = JSON.parse(text);
+                } catch (e) {
+                    // Si no es JSON, podría ser "OK" u otra respuesta
+                    if (text.trim() === 'OK' || text.trim().includes('✅')) {
+                        // Si es OK, asumir que se envió correctamente
+                        data = { success: true };
+                    } else {
+                        data = { success: false, error: text.substring(0, 100) };
+                    }
+                }
+                
+                console.log('Respuesta de envío:', data);
+                if (data.success) {
+                    document.getElementById('messageInput').value = '';
+                    document.getElementById('messageInput').style.height = 'auto';
+                    clearImagePreview();
+                    // Recargar mensajes después de enviar (más rápido)
+                    setTimeout(() => {
+                        ultimoMensajeId[chatActual] = null; // Forzar recarga completa
+                        cargarMensajes(chatActual);
+                        cargarChats(); // Actualizar lista de chats
+                    }, 300);
+                } else {
+                    alert('Error al enviar mensaje: ' + (data.error || 'Error desconocido'));
+                }
+                btn.disabled = false;
+                btn.textContent = 'Enviar';
+            })
+            .catch(error => {
+                console.error('Error completo:', error);
+                console.error('Stack:', error.stack);
+                console.error('URL:', SCRIPT_URL);
+                console.error('Options:', fetchOptions);
+                
+                // Mensaje de error más descriptivo
+                let errorMsg = 'Error al enviar mensaje: ';
+                if (error.message) {
+                    errorMsg += error.message;
+                } else if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                    errorMsg += 'No se pudo conectar con el servidor. Verifica que la URL del script sea correcta y que el script esté desplegado correctamente.';
+                } else {
+                    errorMsg += 'Error desconocido. Revisa la consola (F12) para más detalles.';
+                }
+                
+                alert(errorMsg);
+                btn.disabled = false;
+                btn.textContent = 'Enviar';
+            });
+        }
+
+        function formatearTiempo(timestamp) {
+            if (!timestamp) return '';
+            
+            try {
+                let fecha;
+                if (typeof timestamp === 'number') {
+                    // Si es un timestamp en segundos (como los de WhatsApp)
+                    if (timestamp < 10000000000) {
+                        fecha = new Date(timestamp * 1000);
+                    } else {
+                        // Si es en milisegundos
+                        fecha = new Date(timestamp);
+                    }
+                } else if (typeof timestamp === 'string') {
+                    fecha = new Date(timestamp);
+                } else {
+                    return '';
+                }
+                
+                // Verificar que la fecha sea válida
+                if (isNaN(fecha.getTime())) {
+                    return '';
+                }
+                
+                const ahora = new Date();
+                const diff = ahora - fecha;
+                const minutos = Math.floor(diff / 60000);
+                const horas = Math.floor(diff / 3600000);
+                const dias = Math.floor(diff / 86400000);
+
+                if (minutos < 1) return 'Ahora';
+                if (minutos < 60) return `Hace ${minutos}m`;
+                if (horas < 24) return `Hace ${horas}h`;
+                if (dias < 7) return `Hace ${dias}d`;
+                
+                return fecha.toLocaleDateString('es-ES', { 
+                    day: '2-digit', 
+                    month: '2-digit', 
+                    hour: '2-digit', 
+                    minute: '2-digit' 
+                });
+            } catch (e) {
+                console.error('Error formateando tiempo:', e, timestamp);
+                return '';
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Función para pausar/activar el bot en un chat
+        function togglePausaBot(phone) {
+            const phoneStr = phone.toString();
+            
+            // Cambiar estado
+            if (window.chatsPausados[phoneStr]) {
+                delete window.chatsPausados[phoneStr];
+            } else {
+                window.chatsPausados[phoneStr] = true;
+            }
+            
+            // Guardar en el servidor
+            const formData = new FormData();
+            formData.append('action', 'togglePausaBot');
+            formData.append('phone', phoneStr);
+            formData.append('pausado', window.chatsPausados[phoneStr] ? '1' : '0');
+            
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                // Actualizar el botón en el header
+                const chat = chats.find(c => c.phone && c.phone.toString() === phoneStr);
+                const nombre = chat ? (chat.name || chat.phone || 'Sin nombre') : phoneStr;
+                const botPausado = window.chatsPausados[phoneStr];
+                
+                document.getElementById('chatHeader').innerHTML = `
+                    <div class="chat-info">
+                        <h2>${escapeHtml(nombre)}</h2>
+                        <p>${escapeHtml(phoneStr)}</p>
+                    </div>
+                    <div class="chat-actions">
+                        <button class="pause-btn ${botPausado ? 'active' : ''}" onclick="togglePausaBot('${phoneStr}')">
+                            ${botPausado ? '⏸️ Bot Pausado' : '▶️ Bot Activo'}
+                        </button>
+                    </div>
+                `;
+            })
+            .catch(error => {
+                console.error('Error al actualizar estado de pausa:', error);
+                alert('Error al actualizar el estado del bot');
+            });
+        }
+        
+        // Cargar estado de pausas al iniciar
+        function cargarPausas() {
+            fetch(SCRIPT_URL + '?action=getPausas')
+                .then(response => response.text())
+                .then(text => {
+                    try {
+                        const data = JSON.parse(text);
+                        if (data.pausas) {
+                            window.chatsPausados = data.pausas;
+                        }
+                    } catch (e) {
+                        // Si no hay pausas o error, dejar vacío
+                        window.chatsPausados = {};
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al cargar pausas:', error);
+                    window.chatsPausados = {};
+                });
+        }
+
+        // Limpiar intervalo al cerrar
+        window.addEventListener('beforeunload', function() {
+            if (intervaloActualizacion) {
+                clearInterval(intervaloActualizacion);
+            }
+        });
+    </script>
+</body>
+</html>
