@@ -8380,132 +8380,90 @@
             guardarCambiosConfiguracion(filasNuevas, filasModificadas, filasEliminadas, columnas, mode);
         }
         
-        function guardarCambiosConfiguracion(filasNuevas, filasModificadas, filasEliminadas, columnas, mode = 'manual') {
+        async function guardarCambiosConfiguracion(filasNuevas, filasModificadas, filasEliminadas, columnas, mode = 'manual') {
             const isAuto = mode === 'auto';
-            let cambiosPendientes = filasNuevas.length + filasModificadas.length + filasEliminadas.length;
-            let cambiosCompletados = 0;
-            let errores = [];
-            
-            const handleCompletion = () => {
-                cambiosCompletados++;
-                if (cambiosCompletados >= cambiosPendientes) {
-                    if (errores.length > 0) {
-                        if (!isAuto) {
-                            setConfigSavingState_(false);
-                            showConfigToast_('Error al guardar. Intente de nuevo.', 'error');
-                        } else {
-                            console.error('[config-auto-save] errores', errores);
-                        }
-                    } else {
-                        if (!isAuto) {
-                            setConfigSavingState_(false);
-                            showConfigToast_('Cambios guardados exitosamente', 'success');
-                        } else {
-                            console.log('[config-auto-save] guardado ok');
-                        }
-                        // Recargar configuración para actualizar configOriginal
-                        setTimeout(() => {
-                            cargarConfiguracion({ silent: true });
-                        }, 1000);
+            const errores = [];
+
+            const postConfigForm_ = async (formData, errorMsg) => {
+                try {
+                    const response = await fetch(getConfigApiUrl(), {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const text = await response.text();
+                    let parsed = null;
+                    try {
+                        parsed = JSON.parse(text);
+                    } catch (_) {
+                        throw new Error(errorMsg);
                     }
+                    if (!parsed || parsed.success !== true) {
+                        throw new Error(parsed && parsed.error ? parsed.error : errorMsg);
+                    }
+                } catch (error) {
+                    errores.push(error && error.message ? error.message : errorMsg);
                 }
             };
             
-            // Eliminar filas eliminadas
-            filasEliminadas.forEach(index => {
+            // IMPORTANTE: borrar de mayor a menor evita corrimiento de índices en Sheet.
+            const filasEliminadasOrdenadas = [...filasEliminadas]
+                .map((n) => Number(n))
+                .filter((n) => Number.isInteger(n) && n >= 0)
+                .sort((a, b) => b - a);
+
+            // 1) Eliminaciones
+            for (const index of filasEliminadasOrdenadas) {
                 const formData = new FormData();
                 formData.append('action', 'delete_row');
-                formData.append('row_index', index);
-                
-                fetch(getConfigApiUrl(), {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.text())
-                .then(text => {
-                    try {
-                        const data = JSON.parse(text);
-                        if (!data.success) {
-                            errores.push(`Error al eliminar fila ${index}: ${data.error}`);
-                        }
-                    } catch (e) {
-                        errores.push(`Error al eliminar fila ${index}`);
-                    }
-                    handleCompletion();
-                })
-                .catch(error => {
-                    errores.push(`Error al eliminar fila ${index}: ${error.message}`);
-                    handleCompletion();
-                });
-            });
+                formData.append('row_index', String(index));
+                await postConfigForm_(formData, `Error al eliminar fila ${index}`);
+            }
             
-            // Actualizar filas modificadas
-            filasModificadas.forEach(({index, data}) => {
+            // 2) Actualizaciones
+            const filasModificadasOrdenadas = [...filasModificadas]
+                .filter((item) => item && Number.isInteger(Number(item.index)))
+                .sort((a, b) => Number(a.index) - Number(b.index));
+            for (const { index, data } of filasModificadasOrdenadas) {
+                const idx = Number(index);
                 const formData = new FormData();
                 formData.append('action', 'update_row');
-                formData.append('row_index', index);
-                
+                formData.append('row_index', String(idx));
                 columnas.forEach(col => {
                     formData.append(col, data[col] || '');
                 });
-                
-                fetch(getConfigApiUrl(), {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.text())
-                .then(text => {
-                    try {
-                        const data = JSON.parse(text);
-                        if (!data.success) {
-                            errores.push(`Error al actualizar fila ${index}: ${data.error}`);
-                        }
-                    } catch (e) {
-                        errores.push(`Error al actualizar fila ${index}`);
-                    }
-                    handleCompletion();
-                })
-                .catch(error => {
-                    errores.push(`Error al actualizar fila ${index}: ${error.message}`);
-                    handleCompletion();
-                });
-            });
+                await postConfigForm_(formData, `Error al actualizar fila ${idx}`);
+            }
             
-            // Agregar filas nuevas
-            filasNuevas.forEach(row => {
+            // 3) Altas
+            for (const row of filasNuevas) {
                 const formData = new FormData();
                 formData.append('action', 'add_row');
-                
                 columnas.forEach(col => {
                     formData.append(col, row[col] || '');
                 });
-                
-                fetch(getConfigApiUrl(), {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.text())
-                .then(text => {
-                    try {
-                        const data = JSON.parse(text);
-                        if (!data.success) {
-                            errores.push(`Error al agregar fila: ${data.error}`);
-                        }
-                    } catch (e) {
-                        errores.push(`Error al agregar fila`);
-                    }
-                    handleCompletion();
-                })
-                .catch(error => {
-                    errores.push(`Error al agregar fila: ${error.message}`);
-                    handleCompletion();
-                });
-            });
-            
-            // Si no hay cambios pendientes, completar inmediatamente
-            if (cambiosPendientes === 0) {
-                handleCompletion();
+                await postConfigForm_(formData, 'Error al agregar fila');
             }
+
+            if (errores.length > 0) {
+                if (!isAuto) {
+                    setConfigSavingState_(false);
+                    showConfigToast_('Error al guardar. Intente de nuevo.', 'error');
+                } else {
+                    console.error('[config-auto-save] errores', errores);
+                }
+                return;
+            }
+
+            if (!isAuto) {
+                setConfigSavingState_(false);
+                showConfigToast_('Cambios guardados exitosamente', 'success');
+            } else {
+                console.log('[config-auto-save] guardado ok');
+            }
+            // Recargar configuración para actualizar configOriginal
+            setTimeout(() => {
+                cargarConfiguracion({ silent: true });
+            }, 1000);
         }
 
         function togglePausaBot(phone) {
