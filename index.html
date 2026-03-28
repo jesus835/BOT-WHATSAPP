@@ -5042,11 +5042,12 @@
                 // Verificar si la sesión no ha expirado (si tiene fecha de expiración)
                 if (sessionData.expires && new Date() > new Date(sessionData.expires)) {
                     localStorage.removeItem('userSession');
+                    resetFlowSessionCache_();
                     mostrarLogin();
                 } else {
                     ocultarLogin();
                     actualizarPerfilUsuario();
-                    syncFlowEditorIframeApiUrl_();
+                    syncFlowEditorIframeApiUrl_({ applyVisual: true });
                 }
             } else {
                 mostrarLogin();
@@ -5109,7 +5110,7 @@
                     localStorage.setItem('userSession', JSON.stringify(sessionData));
                     ocultarLogin();
                     actualizarPerfilUsuario();
-                    syncFlowEditorIframeApiUrl_();
+                    syncFlowEditorIframeApiUrl_({ applyVisual: true });
                     // Misma API del Sheet → Node local (si el panel corre en el móvil / misma red con NODE_BOT_BASE_URL)
                     syncClientConfigToNodeServer(sessionData).catch(function () { /* sin Node es normal */ });
                     mostrarModal('✅', 'Inicio de sesión exitoso', 'success');
@@ -5401,8 +5402,33 @@
             if (btn) btn.addEventListener('click', statsQrPedirConexion);
         }
 
+        function resetFlowSessionCache_() {
+            try {
+                localStorage.removeItem('config_editor_mode_v1');
+            } catch (_) {}
+            try {
+                storeAgentsCatalogCache = null;
+                storeAgentsPromptsByIdx = [];
+                storeFlowTemplatesCache = [];
+            } catch (_) {}
+            try {
+                configEditorMode_ = 'normal';
+            } catch (_) {}
+            try {
+                configVistaConfiguracionCargada = false;
+            } catch (_) {}
+            try {
+                const host = document.getElementById('flowEditorHost');
+                if (host) host.dataset.flowMounted = '';
+            } catch (_) {}
+            try {
+                window.FlowEditor = null;
+            } catch (_) {}
+        }
+
         function cerrarSesion() {
             localStorage.removeItem('userSession');
+            resetFlowSessionCache_();
             const elCid = document.getElementById('headerSessionClientId');
             const elMail = document.getElementById('headerSessionEmail');
             if (elCid) elCid.textContent = '—';
@@ -8389,10 +8415,58 @@
             }
         }
 
-        function syncFlowEditorIframeApiUrl_() {
+        function hideConfigLoadingVisual_() {
+            const loading = document.getElementById('configLoading');
+            const container = document.getElementById('configTableContainer');
+            if (!loading) return;
+            loading.classList.remove('config-fade-in');
+            loading.classList.add('config-fade-out');
+            setTimeout(function () {
+                loading.style.display = 'none';
+                loading.classList.remove('config-fade-out');
+                if (container) container.style.display = 'block';
+            }, 220);
+        }
+
+        function syncFlowEditorIframeApiUrl_(opts = {}) {
+            const applyVisual = opts && opts.applyVisual === true;
+            const loading = document.getElementById('configLoading');
+            const container = document.getElementById('configTableContainer');
+            let visualSafetyTimer = null;
+            if (applyVisual && loading) {
+                loading.classList.remove('config-fade-out');
+                loading.classList.add('config-fade-in');
+                loading.style.display = 'flex';
+                if (container) container.style.display = 'none';
+                visualSafetyTimer = setTimeout(function () {
+                    hideConfigLoadingVisual_();
+                }, 2500);
+            }
             montarFlowEditorInline_(false);
             if (window.FlowEditor && typeof window.FlowEditor.cargarDesdeSheet === 'function') {
-                return window.FlowEditor.cargarDesdeSheet({ silent: true, source: 'parent-sync', applyVisual: false });
+                const result = window.FlowEditor.cargarDesdeSheet({
+                    silent: !applyVisual,
+                    source: 'parent-sync',
+                    applyVisual: applyVisual
+                });
+                if (applyVisual && result && typeof result.finally === 'function') {
+                    result.finally(function () {
+                        if (visualSafetyTimer) clearTimeout(visualSafetyTimer);
+                        hideConfigLoadingVisual_();
+                    });
+                } else if (applyVisual) {
+                    setTimeout(function () {
+                        if (visualSafetyTimer) clearTimeout(visualSafetyTimer);
+                        hideConfigLoadingVisual_();
+                    }, 700);
+                }
+                return result;
+            }
+            if (applyVisual && loading) {
+                if (visualSafetyTimer) clearTimeout(visualSafetyTimer);
+                loading.style.display = 'none';
+                loading.classList.remove('config-fade-in', 'config-fade-out');
+                if (container) container.style.display = 'block';
             }
         }
 
