@@ -2744,6 +2744,303 @@
             margin-top: 8px;
         }
 
+        /* Panel editar catálogo (misma idea que edit-panel del Flow Editor) */
+        .catalog-edit-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 12055;
+            padding: 16px;
+        }
+        .catalog-edit-overlay.is-open {
+            display: flex;
+        }
+        .catalog-edit-panel.edit-panel {
+            --cat-s: #161714;
+            --cat-b: rgba(255, 255, 255, 0.1);
+            --cat-tx: #f0ede6;
+            --cat-mu: #8a8a7e;
+            --cat-ac: #b8f03e;
+            width: min(92vw, 440px);
+            max-height: min(88vh, 720px);
+            background: var(--cat-s);
+            border: 1px solid var(--cat-b);
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            font-family: 'DM Sans', system-ui, sans-serif;
+            color: var(--cat-tx);
+        }
+        .catalog-edit-panel .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--cat-b);
+            flex-shrink: 0;
+        }
+        .catalog-edit-panel .panel-header h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin: 0;
+        }
+        .catalog-edit-panel .panel-close {
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: rgba(0, 0, 0, 0.25);
+            color: #f0ede6;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            line-height: 1;
+        }
+        .catalog-edit-panel .panel-body {
+            padding: 12px 14px;
+            overflow-y: auto;
+            flex: 1;
+            min-height: 0;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .catalog-edit-panel .panel-body::-webkit-scrollbar {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+        .catalog-edit-panel .panel-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            padding: 10px 14px;
+            border-top: 1px solid var(--cat-b);
+            flex-shrink: 0;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        .catalog-edit-panel .field-group {
+            margin-bottom: 14px;
+        }
+        .catalog-edit-panel .field-label {
+            display: block;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: var(--cat-mu);
+            margin-bottom: 6px;
+        }
+        .catalog-edit-panel .field-textarea,
+        .catalog-edit-panel .field-input {
+            width: 100%;
+            background: #1c1e1a;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 10px;
+            color: var(--cat-tx);
+            padding: 9px 10px;
+            font-size: 0.83rem;
+            outline: none;
+            resize: vertical;
+        }
+        .catalog-edit-panel .field-textarea:focus,
+        .catalog-edit-panel .field-input:focus {
+            border-color: rgba(184, 240, 62, 0.45);
+        }
+        .catalog-edit-panel .field-hint {
+            font-size: 0.72rem;
+            color: var(--cat-mu);
+            line-height: 1.45;
+            margin: 0 0 6px 0;
+        }
+        .catalog-edit-panel .type-selector {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+        .catalog-edit-panel .type-opt {
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            padding: 8px 10px;
+            font-size: 0.78rem;
+            cursor: pointer;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.03);
+            transition: border-color 0.15s, background 0.15s;
+        }
+        .catalog-edit-panel .type-opt:hover {
+            border-color: rgba(184, 240, 62, 0.35);
+        }
+        .catalog-edit-panel .type-opt.active {
+            border-color: rgba(184, 240, 62, 0.55);
+            background: rgba(184, 240, 62, 0.1);
+            color: var(--cat-ac);
+        }
+        .catalog-edit-panel.catalog-edit-panel--sheet .catalog-edit-type-group {
+            display: none;
+        }
+        .catalog-edit-panel .catalog-section-title {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--cat-mu);
+            margin: 14px 0 8px 0;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .catalog-edit-panel .catalog-section-title:first-of-type {
+            margin-top: 0;
+        }
+        .catalog-edit-panel.catalog-edit-panel--sheet .catalog-section-title--flow {
+            display: none;
+        }
+        .catalog-edit-panel .catalog-section-hint {
+            margin-top: -4px;
+        }
+        .catalog-edit-panel .catalog-field-group--content-kind {
+            margin-bottom: 10px;
+        }
+        .catalog-edit-panel .catalog-content-kind-selector .type-opt {
+            font-size: 0.78rem;
+        }
+        .catalog-edit-panel .btn {
+            border-radius: 10px;
+            padding: 9px 14px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+        .catalog-edit-panel .btn-ghost {
+            background: transparent;
+            border-color: rgba(255, 255, 255, 0.14);
+            color: var(--cat-tx);
+        }
+        .catalog-edit-panel .btn-accent {
+            background: rgba(184, 240, 62, 0.18);
+            border-color: rgba(184, 240, 62, 0.45);
+            color: var(--cat-ac);
+        }
+        .catalog-edit-panel .opt-rows {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .catalog-edit-panel .opt-row {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .catalog-edit-panel .opt-row-head {
+            display: flex;
+            margin-bottom: 6px;
+        }
+        .catalog-edit-panel .opt-row-remove {
+            border: none;
+            background: rgba(248, 113, 113, 0.12);
+            color: #f87171;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            line-height: 1;
+        }
+        .catalog-edit-panel .opt-field-hint {
+            display: block;
+            font-size: 0.68rem;
+            color: var(--cat-mu);
+            margin-bottom: 4px;
+        }
+        .catalog-edit-panel .catalog-response-img-wrap {
+            margin-top: 8px;
+            display: flex;
+            justify-content: center;
+        }
+        .catalog-edit-panel .catalog-response-img-inner {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: min(50%, 140px);
+            aspect-ratio: 1 / 1;
+            max-width: 100%;
+            line-height: 0;
+            background: rgba(0, 0, 0, 0.12);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .catalog-edit-panel #catalogPResponseImagePreview_ {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            object-position: center;
+            border-radius: 10px;
+            display: none;
+            vertical-align: top;
+        }
+        .catalog-edit-panel #catalogPResponseImageRemoveBtn_ {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 28px;
+            height: 28px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: rgba(0, 0, 0, 0.35);
+            color: #f0ede6;
+            cursor: pointer;
+            z-index: 2;
+            display: none;
+            padding: 0;
+            font-size: 1rem;
+            line-height: 1;
+        }
+        .catalog-edit-panel #catalogPResponse.catalog-response-textarea {
+            min-height: 7.5rem;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .catalog-edit-panel #catalogPResponse.catalog-response-textarea::-webkit-scrollbar {
+            display: none;
+            width: 0;
+            height: 0;
+        }
+        .catalog-edit-panel .catalog-texto-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .catalog-edit-panel .catalog-texto-stack .catalog-txt-block.catalog-txt-image {
+            margin-bottom: 0;
+        }
+        .catalog-edit-panel--content-articulo .catalog-texto-stack .catalog-txt-image {
+            order: 1;
+        }
+        .catalog-edit-panel--content-articulo .catalog-texto-stack .catalog-txt-name {
+            order: 2;
+        }
+        .catalog-edit-panel--content-articulo .catalog-texto-stack .catalog-txt-price {
+            order: 3;
+        }
+        .catalog-edit-panel--content-articulo .catalog-texto-stack .catalog-txt-desc {
+            order: 4;
+        }
+        .catalog-edit-panel--content-informacion .catalog-texto-stack .catalog-txt-desc {
+            order: 1;
+        }
+        .catalog-edit-panel--content-informacion .catalog-texto-stack .catalog-txt-image {
+            order: 2;
+        }
+        .catalog-edit-panel--content-informacion .catalog-txt-articulo-only {
+            display: none !important;
+        }
         .emoji-category {
             margin-bottom: 20px;
         }
@@ -3676,6 +3973,59 @@
         @keyframes qrSessionSpin {
             to { transform: rotate(360deg); }
         }
+
+        /* Catálogo: overlay sobre la lista (no vacía la grilla mientras carga) */
+        .catalog-list-shell {
+            position: relative;
+            min-height: 80px;
+            width: 100%;
+            max-height: min(70vh, 620px);
+            display: flex;
+            flex-direction: column;
+        }
+        #catalogArea #catalogNodesList.ctx-list {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+        .catalog-list-load-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 8;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 12px;
+            background: rgba(10, 12, 10, 0.72);
+            border-radius: 14px;
+            backdrop-filter: blur(2px);
+            pointer-events: none;
+        }
+        .catalog-list-load-overlay.is-visible {
+            display: flex;
+            pointer-events: auto;
+        }
+        .catalog-list-load-overlay .catalog-list-load-spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid rgba(184, 240, 62, 0.2);
+            border-top-color: #b8f03e;
+            border-radius: 50%;
+            animation: qrSessionSpin 0.85s linear infinite;
+        }
+        .catalog-list-load-overlay .catalog-list-load-text {
+            font-size: 0.82rem;
+            color: rgba(240, 237, 230, 0.92);
+            font-weight: 600;
+        }
+
+        /* Modal: guardando catálogo (misma familia que QR session) */
+        #catalogSavingModal {
+            z-index: 100052;
+        }
         .qr-session-modal-title {
             font-family: 'Syne', sans-serif;
             font-size: 1.15rem;
@@ -4089,6 +4439,255 @@
             color: var(--tx);
             font-weight: 600;
         }
+
+        /* Área Crear Catálogo (solo diseño inicial) */
+        #catalogArea.stats-area {
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 0 !important;
+            background: transparent;
+        }
+        #catalogArea .ctx {
+            --bg: #0e0f0d;
+            --s: #161714;
+            --b: rgba(255, 255, 255, 0.08);
+            --tx: #f0ede6;
+            --mu: #8a8a7e;
+            --ac: #b8f03e;
+            background: var(--bg);
+            font-family: 'DM Sans', system-ui, sans-serif;
+            color: var(--tx);
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            padding: 28px;
+            border-radius: 28px;
+        }
+        #catalogArea .ctx-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        #catalogArea .ctx-mark {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            background: var(--ac);
+            display: grid;
+            place-items: center;
+            color: #0e0f0d;
+            font-weight: 800;
+            font-family: 'Syne', sans-serif;
+        }
+        #catalogArea .ctx-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: -0.5px;
+            font-weight: 800;
+        }
+        #catalogArea .ctx-pill {
+            font-size: 0.72rem;
+            color: var(--mu);
+            border: 1px solid var(--b);
+            border-radius: 999px;
+            padding: 5px 10px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+        #catalogArea .ctx-sub {
+            color: var(--mu);
+            max-width: 860px;
+            line-height: 1.55;
+            margin-bottom: 22px;
+            font-size: 0.92rem;
+        }
+        #catalogArea .ctx-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+        #catalogArea .ctx-btn {
+            border: 1px solid rgba(184, 240, 62, 0.35);
+            background: rgba(184, 240, 62, 0.12);
+            color: var(--ac);
+            border-radius: 10px;
+            padding: 9px 14px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: filter 0.15s;
+        }
+        #catalogArea .ctx-btn:hover { filter: brightness(1.08); }
+        #catalogArea .ctx-note {
+            color: var(--mu);
+            font-size: 0.78rem;
+        }
+        #catalogArea .ctx-list {
+            display: grid;
+            /* Misma anchura de celda; cada tarjeta es cuadrada (aspect-ratio), sin estirar la fila */
+            grid-template-columns: repeat(auto-fill, min(100%, 16.25rem));
+            justify-content: start;
+            align-items: start;
+            gap: 10px;
+        }
+        #catalogArea .ctx-item {
+            border: 1px solid var(--b);
+            border-radius: 12px;
+            background: var(--s);
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            box-sizing: border-box;
+            width: 100%;
+            min-width: 0;
+            min-height: 0;
+            overflow: hidden;
+            /* Cuadrado fijo: el ancho de columna manda; el contenido no puede agrandar la tarjeta */
+            aspect-ratio: 1 / 1;
+            height: auto;
+            max-height: 100%;
+        }
+        #catalogArea .ctx-item-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 8px;
+            flex-shrink: 0;
+            min-width: 0;
+            min-height: 0;
+        }
+        #catalogArea .ctx-item-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--tx);
+            letter-spacing: -0.1px;
+            min-width: 0;
+            flex: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            word-break: break-word;
+            line-height: 1.25;
+        }
+        #catalogArea .ctx-tag {
+            font-size: 0.66rem;
+            color: var(--mu);
+            border: 1px solid var(--b);
+            border-radius: 999px;
+            padding: 3px 8px;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+        #catalogArea .ctx-tag.ctx-tag--active {
+            color: #b8f03e;
+            font-weight: 700;
+            border: 1px solid rgba(184, 240, 62, 0.75);
+            background: rgba(184, 240, 62, 0.1);
+            box-shadow: 0 0 0 1px rgba(184, 240, 62, 0.25);
+        }
+        #catalogArea .ctx-item-desc {
+            color: var(--mu);
+            font-size: 0.68rem;
+            line-height: 1.35;
+            flex-shrink: 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            /* Misma altura reservada (2 líneas) en todas las tarjetas */
+            min-height: calc(0.68rem * 1.35 * 2);
+        }
+        #catalogArea .ctx-preview {
+            flex: 1 1 0;
+            min-height: 0;
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        #catalogArea .ctx-preview-in {
+            box-sizing: border-box;
+            width: 100%;
+            max-width: 100%;
+            aspect-ratio: 1 / 1;
+            max-height: 100%;
+            min-height: 0;
+            margin-inline: auto;
+            border: 1px dashed var(--b);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.14);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--mu);
+            font-size: 0.72rem;
+            overflow: hidden;
+            flex-shrink: 1;
+        }
+        #catalogArea .ctx-preview-in img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            min-width: 0;
+            min-height: 0;
+            object-fit: contain;
+            object-position: center;
+            display: block;
+        }
+        #catalogArea .ctx-item-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            gap: 8px;
+            flex-shrink: 0;
+            margin-top: auto;
+        }
+        #catalogArea .ctx-item-btn {
+            border: 1px solid rgba(184, 240, 62, 0.35);
+            background: rgba(184, 240, 62, 0.12);
+            color: var(--ac);
+            border-radius: 8px;
+            padding: 5px 9px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        #catalogArea .ctx-empty {
+            border: 1px dashed var(--b);
+            border-radius: 14px;
+            color: var(--mu);
+            padding: 20px;
+            font-size: 0.86rem;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.01);
+        }
+        @media (max-width: 1080px) {
+            #catalogArea .ctx-list {
+                grid-template-columns: repeat(auto-fill, min(100%, 13.5rem));
+            }
+        }
+        @media (max-width: 520px) {
+            #catalogArea .ctx-list {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 768px) {
+            #catalogArea .ctx {
+                border-radius: 0;
+                padding: 16px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -4183,6 +4782,14 @@
                     <circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5"/>
                     <path d="M9 1.5v2M9 14.5v2M1.5 9h2M14.5 9h2M3.7 3.7l1.4 1.4M12.9 12.9l1.4 1.4M3.7 14.3l1.4-1.4M12.9 5.1l1.4-1.4"
                         stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="nav-icon" id="navCatalogo" title="Motor de AI" onclick="mostrarVistaCatalogo()" role="button" tabindex="0">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                    <rect x="2" y="3" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M6 7h6M6 10h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    <circle cx="12.5" cy="11.5" r="2" stroke="currentColor" stroke-width="1.3"/>
+                    <path d="M14 13l1.5 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
                 </svg>
             </div>
             <div class="nav-icon" id="navStore" title="Store — plantillas y agentes" onclick="mostrarVistaStore()" role="button" tabindex="0">
@@ -4418,6 +5025,32 @@
   </div>
 
 </div>
+        </div>
+
+        <!-- Área Crear Catálogo (solo diseño) -->
+        <div class="stats-area" id="catalogArea" style="display: none;">
+            <div class="ctx">
+                <div class="ctx-head">
+                    <div class="ctx-mark">C</div>
+                    <span class="ctx-title">Motor de AI</span>
+                    <span class="ctx-pill">Productos Ilimitados</span>
+                </div>
+                <p class="ctx-sub">
+                    Bienvenido al constructor de catálogo de WhatsBot. Editá textos e imágenes de tus ítems, organizá lo que mostrás
+                    en WhatsApp y mantené todo sincronizado con el flujo de tu bot.
+                </p>
+                <div class="ctx-actions">
+                    <button class="ctx-btn" type="button" onclick="catalogEditOpenNew_()">Agregar Nuevo</button>
+                    <button class="ctx-btn" type="button" onclick="cargarCatalogoDesdeConfig_()">Recargar catálogo</button>
+                </div>
+                <div class="catalog-list-shell" id="catalogListShell">
+                    <div id="catalogNodesList" class="ctx-list"></div>
+                    <div id="catalogListLoadOverlay" class="catalog-list-load-overlay" aria-hidden="true">
+                        <div class="catalog-list-load-spinner" aria-hidden="true"></div>
+                        <span class="catalog-list-load-text" id="catalogListLoadOverlayText">Actualizando catálogo…</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Área de Configuración del Bot (oculta por defecto) -->
@@ -4689,6 +5322,16 @@
         </div>
     </div>
 
+    <div id="catalogSavingModal" class="qr-session-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="catalogSavingModalTitle" style="display: none;">
+        <div class="qr-session-modal-box" onclick="event.stopPropagation()">
+            <div class="qr-session-spinner-wrap">
+                <div class="qr-session-spinner" aria-hidden="true"></div>
+            </div>
+            <h3 id="catalogSavingModalTitle" class="qr-session-modal-title">Guardando…</h3>
+            <p class="qr-session-modal-sub" id="catalogSavingModalSub">Sincronizando con el servidor…</p>
+        </div>
+    </div>
+
     <div id="aiAgentModal" class="ai-agent-modal-overlay" onclick="if(event.target===this) cerrarModalAgenteAI()">
         <div class="ai-agent-modal-box" onclick="event.stopPropagation()">
             <h3 class="ai-agent-modal-title">Activar apoyo con Agente AI</h3>
@@ -4850,7 +5493,7 @@
             </div>
             <div class="url-modal-field">
                 <label for="urlOptionUrlInput">URL</label>
-                <input id="urlOptionUrlInput" type="text" placeholder="https://gia.tv/">
+                <input id="urlOptionUrlInput" type="text" placeholder="https://google.com/">
             </div>
             <div class="url-modal-actions">
                 <button class="config-btn" type="button" onclick="cerrarUrlOptionModal_()">Cancelar</button>
@@ -4859,28 +5502,140 @@
         </div>
     </div>
 
+    <div id="catalogEditOverlay" class="catalog-edit-overlay" onclick="if (event.target === this) catalogEditCerrarPanel_()">
+        <div id="catalogEditPanel" class="edit-panel catalog-edit-panel catalog-edit-panel--content-articulo" onclick="event.stopPropagation()">
+            <div class="panel-header">
+                <h4 id="catalogEditPanelTitle">Editar Elemento</h4>
+                <button type="button" class="panel-close" onclick="catalogEditCerrarPanel_()" title="Cerrar">✕</button>
+            </div>
+            <div class="panel-body">
+                <p id="catalogPanelMandatoryHint" class="field-hint" style="display:none;margin:-4px 0 10px 0;padding:8px 10px;border-radius:8px;background:rgba(184,240,62,.08);border:1px solid rgba(184,240,62,.2);line-height:1.4"></p>
+                <div class="field-group catalog-field-group--content-kind">
+                    <span class="field-label">Tipo de contenido</span>
+                    <p class="field-hint catalog-section-hint">Elegí <strong>Artículo</strong> para productos u ofertas, o <strong>Información</strong> para textos y avisos. En ambos podés sumar menú y enlaces abajo (máx. 3 por mensaje en WhatsApp).</p>
+                    <div class="type-selector catalog-content-kind-selector" id="catalogContentKindSelector">
+                        <div class="type-opt active" data-kind="articulo" onclick="catalogEditSetContentKind_(this,'articulo')">Artículo</div>
+                        <div class="type-opt" data-kind="informacion" onclick="catalogEditSetContentKind_(this,'informacion')">Información</div>
+                    </div>
+                </div>
+                <p class="catalog-section-title catalog-section-title--flow">Nodo en el flujo</p>
+                <div class="field-group catalog-edit-type-group">
+                    <span class="field-label">Tipo de nodo</span>
+                    <div class="type-selector catalog-node-type-selector">
+                        <div class="type-opt active" data-type="message" onclick="catalogEditSetTipo_(this,'message')">💬 Mensaje</div>
+                        <div class="type-opt" data-type="option" onclick="catalogEditSetTipo_(this,'option')">🔀 Opción</div>
+                        <div class="type-opt" data-type="start" onclick="catalogEditSetTipo_(this,'start')">▶ Inicio</div>
+                        <div class="type-opt" data-type="end" onclick="catalogEditSetTipo_(this,'end')">⏹ Fin</div>
+                    </div>
+                </div>
+                <p class="catalog-section-title">Texto e imagen</p>
+                <div class="catalog-texto-stack" id="catalogTextoStack">
+                    <div class="field-group catalog-txt-block catalog-txt-image">
+                        <input type="file" id="catalogPResponseImageInput" accept="image/*" style="display:none" onchange="catalogEditConvertirImagenRespuestaDesdeArchivo_()">
+                        <button class="btn btn-ghost" type="button" onclick="catalogEditTriggerResponseImageInput()">Subir imagen</button>
+                        <div id="catalogPResponseImagePreviewWrap_" class="catalog-response-img-wrap">
+                            <div class="catalog-response-img-inner">
+                                <img id="catalogPResponseImagePreview_" alt="Miniatura" style="display:none" src="">
+                                <button type="button" id="catalogPResponseImageRemoveBtn_" onclick="catalogEditQuitarImagenRespuesta_()" title="Quitar imagen">×</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field-group catalog-txt-block catalog-txt-articulo-only catalog-txt-name">
+                        <span class="field-label">Nombre del artículo</span>
+                        <input type="text" class="field-input" id="catalogPArticleName" placeholder="Ej. Remera básica" autocomplete="off">
+                    </div>
+                    <div class="field-group catalog-txt-block catalog-txt-articulo-only catalog-txt-price">
+                        <span class="field-label">Precio</span>
+                        <input type="text" class="field-input" id="catalogPArticlePrice" placeholder="Ej. $12.500" inputmode="decimal" autocomplete="off">
+                    </div>
+                    <div class="field-group catalog-txt-block catalog-txt-desc">
+                        <span class="field-label" id="catalogPResponseLabel">Descripción</span>
+                        <textarea class="field-textarea catalog-response-textarea" id="catalogPResponse" placeholder="Detalle del producto, talles, envíos…" rows="6"></textarea>
+                    </div>
+                </div>
+                <p class="catalog-section-title">Menú y enlaces</p>
+                <div class="field-group" id="catalogPOptionsGroup">
+                    <p class="field-hint">Cada fila es <strong>una opción</strong> (como máximo <strong>3</strong>, límite de WhatsApp por envío). Si ponés enlace, se guarda junto: <code style="font-size:.68rem">inicio/https://google.com/</code>. Varias opciones se separan con <code style="font-size:.68rem">//</code>.</p>
+                    <div class="opt-rows" id="catalogPOptionsBuilder"></div>
+                    <button type="button" class="btn btn-ghost" style="margin-top:2px;width:100%" onclick="catalogEditAgregarFilaOpcionBuilder_()">+ Añadir opción</button>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <button class="btn btn-ghost" type="button" onclick="catalogEditCerrarPanel_()">Cancelar</button>
+                <button class="btn btn-accent" type="button" onclick="catalogEditGuardar_()">Guardar</button>
+            </div>
+        </div>
+    </div>
+
     <div id="configToast" class="config-toast" aria-live="polite"></div>
 
     <script>
-        // ⚙️ URLs por defecto (si el usuario no trae api en el Sheet de login)
+        /** Fallback solo para API de chats / agentes (pausas, mensajes). La API de configuración no usa URL de fábrica. */
         const SCRIPT_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbxFXmnPoaJwlW6ATPz4LtdSOJy9D7Sxd6GOnBrYRGN5VHXCt_p8VqpdbwhcOwCBCGHdBg/exec';
-        const CONFIG_URL_DEFAULT = 'https://script.google.com/macros/s/AKfycbzkgIg8Y_javhIlLZzHO8YzvuNGZmFCTAqctOoqn9VEFRauETGDDBtlLcOqAFVnUQFb0Q/exec';
 
         function isLikelyHttpUrl(str) {
             return /^https?:\/\//i.test(String(str || '').trim());
         }
 
+        /** Valor de columna aunque el Sheet devuelva distinta capitalización (p. ej. `Roll` vs `roll`). */
+        function getUsuarioFieldByNameCI_(u, name) {
+            if (!u || typeof u !== 'object' || !name) return undefined;
+            if (Object.prototype.hasOwnProperty.call(u, name)) return u[name];
+            const want = String(name).toLowerCase();
+            const keys = Object.keys(u);
+            for (let i = 0; i < keys.length; i++) {
+                if (String(keys[i]).toLowerCase() === want) return u[keys[i]];
+            }
+            return undefined;
+        }
+
+        /** Primera URL de Web App de Apps Script (…/macros/s/…) encontrada en el objeto de fila del login. */
+        function findGoogleWebAppUrlInUsuario_(u) {
+            if (!u || typeof u !== 'object') return '';
+            const preferred = [
+                'apiUrl', 'api', 'sheetApi', 'configUrl', 'urlSheet', 'scriptUrl', 'chatUrl', 'scriptApi',
+                'url', 'URL', 'link', 'webApp', 'webapp', 'endpoint', 'enlace', 'cerebro', 'brainUrl'
+            ];
+            for (let i = 0; i < preferred.length; i++) {
+                const k = preferred[i];
+                if (u[k] == null) continue;
+                const s = String(u[k]).trim();
+                if (/^https:\/\/script\.google\.com\/macros\/s\//i.test(s)) return s;
+            }
+            const keys = Object.keys(u);
+            for (let j = 0; j < keys.length; j++) {
+                const v = u[keys[j]];
+                if (v == null) continue;
+                const s = String(v).trim();
+                if (/^https:\/\/script\.google\.com\/macros\/s\//i.test(s)) return s;
+            }
+            return '';
+        }
+
         /**
          * Lee la URL de API del Sheet del usuario.
-         * Acepta: apiUrl, api, sheetApi, configUrl, urlSheet
+         * Acepta: apiUrl, api, sheetApi, configUrl, urlSheet y otras; si no coincide el nombre de columna,
+         * se usa la primera celda cuya cadena sea una Web App de Apps Script (…/macros/s/…).
          * Compat: columna "Roll" a veces trae la URL del cerebro → si roll parece http, se usa como API.
          * Opcional chats: scriptUrl, chatUrl, scriptApi
          */
         function pickSheetApiUrlsFromUsuario(usuario) {
             const u = usuario || {};
+            const rollStr = (function () {
+                const v = getUsuarioFieldByNameCI_(u, 'roll');
+                return v != null ? String(v).trim() : '';
+            })();
+
             let config = String(u.apiUrl || u.api || u.sheetApi || u.configUrl || u.urlSheet || '').trim();
-            if (!config && isLikelyHttpUrl(u.roll)) {
-                config = String(u.roll).trim();
+            // La URL del cerebro suele ir en la columna Roll: priorizarla si es Web App de Apps Script.
+            if (rollStr && /^https:\/\/script\.google\.com\/macros\/s\//i.test(rollStr)) {
+                config = rollStr;
+            } else if (!config && isLikelyHttpUrl(rollStr)) {
+                config = rollStr;
+            }
+            if (!config || !/^https:\/\/script\.google\.com\/macros\/s\//i.test(config)) {
+                const found = findGoogleWebAppUrlInUsuario_(u);
+                if (found) config = found;
             }
             let script = String(u.scriptUrl || u.chatUrl || u.scriptApi || '').trim();
             if (config && !/^https?:\/\//i.test(config)) config = '';
@@ -4892,7 +5647,8 @@
         /** Texto de rol para la UI: si "roll" es la URL de API, usa rol/role o "Usuario". */
         function pickRollDisplayName(usuario) {
             const u = usuario || {};
-            const raw = u.roll != null ? String(u.roll).trim() : '';
+            const rv = getUsuarioFieldByNameCI_(u, 'roll');
+            const raw = rv != null ? String(rv).trim() : '';
             if (isLikelyHttpUrl(raw)) {
                 const alt = String(u.rol || u.role || u.nombreRol || u.userRole || '').trim();
                 return alt || 'Usuario';
@@ -4911,21 +5667,21 @@
             };
         }
 
-        /** Web App de configuración (reglas, get_config, etc.) */
+        /** Web App de configuración (reglas, get_config, etc.). Solo URL guardada en login — sin URL de fábrica. */
         function getConfigApiUrl() {
             try {
                 const raw = localStorage.getItem('userSession');
-                if (!raw) return CONFIG_URL_DEFAULT;
+                if (!raw) return '';
                 const d = JSON.parse(raw);
                 const c = String(d.configApiUrl || '').trim();
                 if (c && /^https?:\/\//i.test(c)) return c;
-                return CONFIG_URL_DEFAULT;
+                return '';
             } catch (_) {
-                return CONFIG_URL_DEFAULT;
+                return '';
             }
         }
 
-        /** Web App de chats / pausas / mensajes */
+        /** Web App de chats / pausas / mensajes (agentes). Sesión primero; si falta, URL por defecto de agentes. */
         function getScriptApiUrl() {
             try {
                 const raw = localStorage.getItem('userSession');
@@ -5092,7 +5848,10 @@
                         email: loginEmailBase,
                         clientId: clientId,
                         roll: pickRollDisplayName(usuario),
-                        rollRaw: usuario && usuario.roll != null ? String(usuario.roll).trim() : '',
+                        rollRaw: (function () {
+                            const v = getUsuarioFieldByNameCI_(usuario || {}, 'roll');
+                            return v != null ? String(v).trim() : '';
+                        })(),
                         ownedAgents: Array.isArray(correoInfo.agents) ? correoInfo.agents : [],
                         configApiUrl: apis.config || '',
                         scriptApiUrl: apis.script || apis.config || '',
@@ -5504,6 +6263,16 @@
         let configVistaConfiguracionCargada = false;
         let agenteAIApoyoActivo = false;
         let autoSaveConfigTimer = null;
+        let catalogFlowState_ = { snapshot: null, rowIndex: -1, rowField: '', rowData: null };
+        /** Estado del panel «editar catálogo» (flujo vs fila Sheet). */
+        let catalogEditState_ = {
+            kind: '',
+            nodeId: '',
+            rowIndex: -1,
+            initialOptions: '',
+            imageB64: '',
+            isNew: false
+        };
         const CONFIG_META_KEYWORDS = new Set(['api', '__flow_json__', 'd - ia activa']);
         const CONFIG_PROTECTED_KEYWORDS = new Set(['pedido', 'envio confirmado', 'default', 'hola', 'inicio']);
         const CONFIG_AI_ACTIVE_KEYWORD = 'D - IA Activa';
@@ -5564,6 +6333,31 @@
         const CONFIG_IMG_MARKER_START = '__IMG_BASE64__:';
         const CONFIG_IMG_MARKER_END = '__END_IMG__';
         const CONFIG_MAX_RESPONSE_IMAGE_CHARS = 49000;
+        /** Botones / ítems de lista interactiva por mensaje (WhatsApp). */
+        const CATALOG_MAX_WHATSAPP_MENU_OPTIONS = 3;
+        /** Evita que el modal «Guardando» o la recarga del listado queden colgados si la API no responde. */
+        const CATALOG_FETCH_TIMEOUT_MS = 120000;
+
+        async function fetchWithTimeoutCatalog_(url, init, timeoutMs) {
+            var ms = timeoutMs != null ? Number(timeoutMs) : CATALOG_FETCH_TIMEOUT_MS;
+            if (!(ms > 0)) ms = CATALOG_FETCH_TIMEOUT_MS;
+            var ctrl = new AbortController();
+            var timer = setTimeout(function () {
+                try { ctrl.abort(); } catch (e) {}
+            }, ms);
+            try {
+                return await fetch(url, Object.assign({}, init || {}, { signal: ctrl.signal }));
+            } catch (e) {
+                var name = e && e.name;
+                var msg = e && e.message ? String(e.message) : '';
+                if (name === 'AbortError' || /aborted/i.test(msg)) {
+                    throw new Error('Tiempo de espera agotado al contactar el servidor. Revisá la conexión o probá de nuevo.');
+                }
+                throw e;
+            } finally {
+                clearTimeout(timer);
+            }
+        }
 
         function parseConfigResponseWithImage_(serial) {
             const s = String(serial || '');
@@ -5581,6 +6375,1214 @@
             const img = String(imageBase64 || '').trim();
             if (!img) return t;
             return `${t}\n${CONFIG_IMG_MARKER_START}${img}${CONFIG_IMG_MARKER_END}`;
+        }
+
+        /** En Artículo, nombre + precio van en el mismo texto que la descripción (columna responses / mensaje enviado). */
+        function catalogComposeArticuloResponseText_(name, price, description) {
+            const n = String(name || '').trim();
+            const p = String(price || '').trim();
+            const d = String(description || '').trim();
+            const headParts = [];
+            if (n) headParts.push(n);
+            if (p) headParts.push(p);
+            const head = headParts.join('\n');
+            if (head && d) return head + '\n\n' + d;
+            if (head) return head;
+            return d;
+        }
+
+        /** Para el textarea de descripción: quita el encabezado nombre/precio si coincide con meta guardada. */
+        function catalogExtractDescriptionFromArticuloStored_(storedText, name, price) {
+            const full = String(storedText != null ? storedText : '');
+            const n = String(name || '').trim();
+            const p = String(price || '').trim();
+            const headParts = [];
+            if (n) headParts.push(n);
+            if (p) headParts.push(p);
+            const head = headParts.join('\n');
+            if (head && full.startsWith(head)) {
+                let rest = full.slice(head.length);
+                rest = rest.replace(/^\s*\n+/, '');
+                return rest.replace(/\s+$/g, '');
+            }
+            return full.trim();
+        }
+
+        function extractFlowSnapshotFromConfigRows_(rows) {
+            if (!Array.isArray(rows)) return null;
+            const candidateFields = ['responses', 'options', 'api', 'flow', 'flujo', 'flow_json', 'json', 'template', 'plantilla', 'data', 'prompt'];
+            let best = null;
+            let bestScore = -1;
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows[i] || {};
+                const kw = String(row.keywords || '').trim().toLowerCase();
+                const preferMeta = kw === '__flow_json__' || kw === 'api' ? 5000 : 0;
+                for (let j = 0; j < candidateFields.length; j++) {
+                    const key = candidateFields[j];
+                    const raw = row[key];
+                    const parsed = tryParseStoreFlowSnapshot_(raw);
+                    if (!parsed) continue;
+                    const n = Array.isArray(parsed.nodes) ? parsed.nodes.length : 0;
+                    const score = preferMeta + n + (key === 'responses' ? 1 : 0);
+                    if (score > bestScore) {
+                        bestScore = score;
+                        best = { snapshot: parsed, rowIndex: i, rowField: key, rowData: row };
+                    }
+                }
+            }
+            return best;
+        }
+
+        /**
+         * Une TODAS las celdas del Sheet que contienen JSON de flujo (varias filas = varios bloques).
+         * Los nodos se unen por id (gana la última aparición). Así no se pierde el 2.º nodo sin keyword.
+         */
+        function mergeAllFlowSnapshotsFromConfigForCatalog_(rows) {
+            if (!Array.isArray(rows)) return null;
+            const candidateFields = ['responses', 'options', 'api', 'flow', 'flujo', 'flow_json', 'json', 'template', 'plantilla', 'data', 'prompt'];
+            const nodesById = new Map();
+            const mergedTop = {};
+            let saveMeta = null;
+            let saveScore = -1;
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows[i] || {};
+                const kw = String(row.keywords || '').trim().toLowerCase();
+                for (let j = 0; j < candidateFields.length; j++) {
+                    const key = candidateFields[j];
+                    const parsed = tryParseStoreFlowSnapshot_(row[key]);
+                    if (!parsed) continue;
+                    (parsed.nodes || []).forEach(function (n) {
+                        if (n && n.id != null && String(n.id).trim() !== '') {
+                            nodesById.set(String(n.id).trim(), n);
+                        }
+                    });
+                    Object.keys(parsed).forEach(function (k) {
+                        if (k === 'nodes' || k === 'connections' || k === 'connectionsByRow') return;
+                        const v = parsed[k];
+                        if (v && typeof v === 'object' && !Array.isArray(v)) {
+                            if (!mergedTop[k]) mergedTop[k] = {};
+                            try {
+                                Object.assign(mergedTop[k], v);
+                            } catch (e) {}
+                        } else if (mergedTop[k] === undefined) {
+                            mergedTop[k] = v;
+                        }
+                    });
+                    const sc = (kw === '__flow_json__' ? 5000 : kw === 'api' ? 4000 : 0) +
+                        (Array.isArray(parsed.nodes) ? parsed.nodes.length : 0) * 10 +
+                        (key === 'responses' ? 5 : 0);
+                    if (sc > saveScore) {
+                        saveScore = sc;
+                        saveMeta = { rowIndex: i, rowField: key, rowData: row };
+                    }
+                }
+            }
+            if (nodesById.size === 0) return null;
+            const snap = Object.assign({}, mergedTop, {
+                nodes: Array.from(nodesById.values()),
+                connections: Array.isArray(mergedTop.connections) ? mergedTop.connections : [],
+                connectionsByRow: Array.isArray(mergedTop.connectionsByRow) ? mergedTop.connectionsByRow : []
+            });
+            return {
+                snapshot: snap,
+                rowIndex: saveMeta ? saveMeta.rowIndex : -1,
+                rowField: saveMeta ? saveMeta.rowField : '',
+                rowData: saveMeta ? saveMeta.rowData : null
+            };
+        }
+
+        function catalogNodeKeywords_(node) {
+            if (!node || typeof node !== 'object') return '';
+            const raw = node.keywords != null ? node.keywords : node.keyword;
+            return String(raw || '').trim();
+        }
+
+        /**
+         * Solo nodos **sin** palabra clave (vacío): son los que se usan como ítems de catálogo.
+         * Se excluyen nodos ocultos en el lienzo (_hiddenFromFlow).
+         */
+        function getCatalogNodesFromSnapshot_(snapshot) {
+            const nodes = Array.isArray(snapshot && snapshot.nodes) ? snapshot.nodes : [];
+            return nodes.filter(function (node) {
+                if (!node || typeof node !== 'object') return false;
+                if (node._hiddenFromFlow === true) return false;
+                return !catalogNodeKeywords_(node);
+            });
+        }
+
+        /**
+         * Filas sueltas del Sheet (get_config) con keywords vacío: típico catálogo con texto/imagen
+         * fuera del JSON del flujo (__flow_json__ va aparte). No incluye filas que parecen snapshot JSON embebido.
+         */
+        function collectCatalogSheetRows_(rows) {
+            if (!Array.isArray(rows)) return [];
+            const out = [];
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows[i] || {};
+                const kw = String(row.keywords != null ? row.keywords : '').trim();
+                if (kw) continue;
+                if (tryParseStoreFlowSnapshot_(row.api)) continue;
+                const rt = String(row.responses != null ? row.responses : '').trim();
+                if (rt.charAt(0) === '{' && tryParseStoreFlowSnapshot_(row.responses)) continue;
+                const r = rt;
+                const a = String(row.api != null ? row.api : '').trim();
+                const o = String(row.options != null ? row.options : '').trim();
+                if (!r && !a && !o) continue;
+                out.push({ rowIndex: i, row: row });
+            }
+            return out;
+        }
+
+        function getCatalogItemCount_(snapshot, configRows) {
+            return getCatalogNodesFromSnapshot_(snapshot).length + collectCatalogSheetRows_(configRows).length;
+        }
+
+        function catalogFindNodeById_(snapshot, id) {
+            const nodes = Array.isArray(snapshot && snapshot.nodes) ? snapshot.nodes : [];
+            const key = String(id || '').trim();
+            for (let i = 0; i < nodes.length; i++) {
+                if (String(nodes[i] && nodes[i].id || '').trim() === key) return nodes[i];
+            }
+            return null;
+        }
+
+        /** Busca mapas auxiliares en el snapshot (p. ej. imageStore) que el editor pueda guardar junto a nodes. */
+        function catalogExtractFromSnapshotSidecar_(snapshot, nodeId) {
+            const id = String(nodeId || '').trim();
+            if (!id || !snapshot || typeof snapshot !== 'object') return '';
+            const keys = Object.keys(snapshot);
+            for (let i = 0; i < keys.length; i++) {
+                const k = keys[i];
+                if (k === 'nodes' || k === 'connections' || k === 'connectionsByRow') continue;
+                const v = snapshot[k];
+                if (!v || typeof v !== 'object' || Array.isArray(v)) continue;
+                const cand = v[id];
+                if (typeof cand === 'string' && cand.trim()) {
+                    const t = cand.trim();
+                    if (t.startsWith('data:image') || t.startsWith('http://') || t.startsWith('https://')) return t;
+                    if (t.length > 120 && /^[A-Za-z0-9+/=]+$/.test(t.replace(/\s/g, ''))) {
+                        return 'data:image/jpeg;base64,' + t.replace(/\s/g, '');
+                    }
+                }
+            }
+            return '';
+        }
+
+        function catalogScanLooseDataUrlInNode_(node) {
+            const parts = [node.responses, node.responsesText, node.imageBase64].map(function (s) {
+                return String(s || '');
+            });
+            for (let i = 0; i < parts.length; i++) {
+                const m = parts[i].match(/data:image\/[a-z0-9+.-]+;base64,[A-Za-z0-9+/=\r\n]+/i);
+                if (m) return m[0].replace(/\s+/g, '');
+            }
+            return '';
+        }
+
+        /**
+         * Obtiene una URL de imagen mostrable para un nodo del flujo (misma lógica que el editor:
+         * data URL embebida, marcadores __IMG_BASE64__, o referencias __IMG_REF__ resueltas en cadena).
+         * refChain evita bucles infinitos; no bloquea auto-referencias como el Set anterior.
+         */
+        function catalogExtractFlowNodeImage_(snapshot, node, depth, refChain) {
+            if (!node || depth > 14) return '';
+            const chain = Array.isArray(refChain) ? refChain : [];
+            const vid = String(node.id || '').trim();
+
+            const side = catalogExtractFromSnapshotSidecar_(snapshot, vid);
+            if (side) return side;
+
+            const scanDataUrlInText = function (txt) {
+                const s = String(txt || '');
+                const m = s.match(/data:image\/[a-z0-9+.-]+;base64,[A-Za-z0-9+/=\r\n]+/i);
+                if (!m) return '';
+                return m[0].replace(/\s+/g, '');
+            };
+
+            let fromBlob = scanDataUrlInText(node.responses) ||
+                scanDataUrlInText(node.responsesText) ||
+                scanDataUrlInText(node.imageBase64);
+            if (fromBlob) return fromBlob;
+
+            const followRef = function (refId) {
+                const rid = String(refId || '').trim();
+                if (!rid) return '';
+                if (chain.indexOf(rid) !== -1) {
+                    return catalogScanLooseDataUrlInNode_(node);
+                }
+                const tgt = catalogFindNodeById_(snapshot, rid);
+                if (!tgt) return '';
+                return catalogExtractFlowNodeImage_(snapshot, tgt, depth + 1, chain.concat([rid]));
+            };
+
+            const parsed = parseConfigResponseWithImage_(node.responses || '');
+            if (parsed.imageBase64) {
+                const inner = String(parsed.imageBase64 || '').trim();
+                if (inner.startsWith('data:image')) return inner.replace(/\s+/g, '');
+                if (/^https?:\/\//i.test(inner)) return inner;
+                if (/^__IMG_REF__:/i.test(inner)) {
+                    const refId = inner.replace(/^__IMG_REF__:/i, '').trim();
+                    const got = followRef(refId);
+                    if (got) return got;
+                }
+                const cleaned = inner.replace(/\s/g, '').replace(/^data:image\/[^;]+;base64,/i, '');
+                if (cleaned.length > 80) return 'data:image/jpeg;base64,' + cleaned;
+            }
+
+            const ib = String(node.imageBase64 || '').trim();
+            if (ib.startsWith('data:image')) return ib.replace(/\s+/g, '');
+            if (/^https?:\/\//i.test(ib)) return ib;
+            if (/^__IMG_REF__:/i.test(ib)) {
+                const refId = ib.replace(/^__IMG_REF__:/i, '').trim();
+                const got = followRef(refId);
+                if (got) return got;
+            }
+
+            const resp = String(node.responses || '');
+            const startIdx = resp.indexOf(CONFIG_IMG_MARKER_START);
+            if (startIdx !== -1) {
+                const endIdx = resp.indexOf(CONFIG_IMG_MARKER_END, startIdx + CONFIG_IMG_MARKER_START.length);
+                if (endIdx !== -1) {
+                    const inner = resp.slice(startIdx + CONFIG_IMG_MARKER_START.length, endIdx).trim();
+                    if (inner.startsWith('data:image')) return inner.replace(/\s+/g, '');
+                    if (/^__IMG_REF__:/i.test(inner)) {
+                        const refId = inner.replace(/^__IMG_REF__:/i, '').trim();
+                        const got = followRef(refId);
+                        if (got) return got;
+                    }
+                    const cleaned = inner.replace(/\s/g, '').replace(/^data:image\/[^;]+;base64,/i, '');
+                    if (cleaned.length > 80) return 'data:image/jpeg;base64,' + cleaned;
+                }
+            }
+            return '';
+        }
+
+        function catalogNormalizeImageSrc_(snapshot, rawImage) {
+            const raw = String(rawImage || '').trim();
+            if (!raw) return '';
+            if (raw.startsWith('data:image')) return raw.replace(/\s+/g, '');
+            if (/^https?:\/\//i.test(raw)) return raw;
+            if (/^__IMG_REF__:/i.test(raw)) {
+                const refId = raw.replace(/^__IMG_REF__:/i, '').trim();
+                const tgt = catalogFindNodeById_(snapshot, refId);
+                if (tgt) return catalogExtractFlowNodeImage_(snapshot, tgt, 0, []);
+            }
+            const cleaned = raw.replace(/\s/g, '').replace(/^data:image\/[^;]+;base64,/i, '');
+            if (!cleaned) return '';
+            return 'data:image/jpeg;base64,' + cleaned;
+        }
+
+        function catalogParseOptionSegment_(seg) {
+            const s = String(seg || '').trim();
+            const m = s.match(/^(.*?)(https?:\/\/.+)$/i);
+            if (m) {
+                const left = String(m[1] || '').replace(/\/*$/g, '').trim();
+                return { kw: left, url: m[2].trim() };
+            }
+            return { kw: s, url: '' };
+        }
+
+        function catalogReadMetaFromRow_(row) {
+            const def = { catalogContentKind: 'articulo', catalogArticleName: '', catalogArticlePrice: '' };
+            if (!row || typeof row !== 'object') return def;
+            function tryParse(val) {
+                const s = String(val != null ? val : '').trim();
+                if (s.charAt(0) !== '{') return null;
+                try {
+                    const o = JSON.parse(s);
+                    if (!o || typeof o !== 'object' || Array.isArray(o)) return null;
+                    return o;
+                } catch (_) {
+                    return null;
+                }
+            }
+            let o = tryParse(row.api);
+            if (!o) o = tryParse(row.ia);
+            if (!o) return def;
+            const kind = (o.catalogContentKind === 'informacion' || o.catalogContentKind === 'articulo') ? o.catalogContentKind : 'articulo';
+            return {
+                catalogContentKind: kind,
+                catalogArticleName: String(o.catalogArticleName != null ? o.catalogArticleName : '').trim(),
+                catalogArticlePrice: String(o.catalogArticlePrice != null ? o.catalogArticlePrice : '').trim()
+            };
+        }
+
+        function catalogReadKindFromRow_(row) {
+            return catalogReadMetaFromRow_(row).catalogContentKind;
+        }
+
+        function catalogWriteMetaToRow_(row, meta) {
+            if (!row || typeof row !== 'object' || !meta || typeof meta !== 'object') return;
+            const k = meta.catalogContentKind === 'informacion' ? 'informacion' : 'articulo';
+            const out = {
+                catalogContentKind: k,
+                catalogArticleName: String(meta.catalogArticleName != null ? meta.catalogArticleName : '').trim(),
+                catalogArticlePrice: String(meta.catalogArticlePrice != null ? meta.catalogArticlePrice : '').trim()
+            };
+            const apiVal = String(row.api != null ? row.api : '').trim();
+            if (!apiVal || apiVal.charAt(0) === '{') {
+                let existing = {};
+                try {
+                    if (apiVal) existing = JSON.parse(apiVal);
+                } catch (_) {
+                    existing = {};
+                }
+                if (!existing || typeof existing !== 'object' || Array.isArray(existing)) existing = {};
+                Object.assign(existing, out);
+                row.api = JSON.stringify(existing);
+            } else {
+                let existing = {};
+                const iaVal = String(row.ia != null ? row.ia : '').trim();
+                try {
+                    if (iaVal.charAt(0) === '{') existing = JSON.parse(iaVal);
+                } catch (_) {
+                    existing = {};
+                }
+                if (!existing || typeof existing !== 'object' || Array.isArray(existing)) existing = {};
+                Object.assign(existing, out);
+                row.ia = JSON.stringify(existing);
+            }
+        }
+
+        function catalogWriteKindToRow_(row, kind) {
+            const m = catalogReadMetaFromRow_(row);
+            m.catalogContentKind = kind === 'informacion' ? 'informacion' : 'articulo';
+            catalogWriteMetaToRow_(row, m);
+        }
+
+        function catalogGetConfigTableColumnNames_() {
+            const thead = document.getElementById('configTableHeader');
+            const columnas = [];
+            if (thead) {
+                thead.querySelectorAll('th').forEach(function (th) {
+                    const n = th.textContent.trim();
+                    if (n && n !== 'Acciones') columnas.push(n);
+                });
+            }
+            if (columnas.length === 0) {
+                return ['keywords', 'responses', 'options', 'api', 'ia'];
+            }
+            return columnas;
+        }
+
+        function catalogEditHideMandatoryHint_() {
+            const el = document.getElementById('catalogPanelMandatoryHint');
+            if (el) {
+                el.style.display = 'none';
+                el.textContent = '';
+            }
+        }
+
+        function catalogEditShowMandatoryHint_(msg) {
+            const el = document.getElementById('catalogPanelMandatoryHint');
+            if (!el) return;
+            el.textContent = msg || '';
+            el.style.display = msg ? 'block' : 'none';
+        }
+
+        function catalogEditRefreshOverlay_(open) {
+            const ov = document.getElementById('catalogEditOverlay');
+            if (!ov) return;
+            if (open) ov.classList.add('is-open');
+            else ov.classList.remove('is-open');
+        }
+
+        function catalogEditGetSelectedTipo_() {
+            const panel = document.getElementById('catalogEditPanel');
+            if (!panel) return 'message';
+            const act = panel.querySelector('.catalog-node-type-selector .type-opt.active');
+            return act ? String(act.getAttribute('data-type') || 'message') : 'message';
+        }
+
+        function catalogEditGetSelectedContentKind_() {
+            const sel = document.getElementById('catalogContentKindSelector');
+            if (!sel) return 'articulo';
+            const act = sel.querySelector('.type-opt.active');
+            const k = act ? String(act.getAttribute('data-kind') || '').trim() : '';
+            return k === 'informacion' ? 'informacion' : 'articulo';
+        }
+
+        function catalogEditRefreshTextoLabels_() {
+            const kind = catalogEditGetSelectedContentKind_();
+            const lab = document.getElementById('catalogPResponseLabel');
+            if (lab) lab.textContent = kind === 'articulo' ? 'Descripción' : 'Respuesta';
+            const ta = document.getElementById('catalogPResponse');
+            if (ta) {
+                ta.placeholder = kind === 'articulo'
+                    ? 'Detalle del producto, talles, envíos…'
+                    : '¡Hola! Bienvenido…';
+            }
+        }
+
+        function catalogEditApplyContentKindUi_(kind) {
+            const sel = document.getElementById('catalogContentKindSelector');
+            if (!sel) return;
+            const k = kind === 'informacion' ? 'informacion' : 'articulo';
+            sel.querySelectorAll('.type-opt').forEach(function (o) {
+                o.classList.toggle('active', o.getAttribute('data-kind') === k);
+            });
+            const panel = document.getElementById('catalogEditPanel');
+            if (panel) {
+                panel.classList.remove('catalog-edit-panel--content-articulo', 'catalog-edit-panel--content-informacion');
+                panel.classList.add(k === 'informacion' ? 'catalog-edit-panel--content-informacion' : 'catalog-edit-panel--content-articulo');
+            }
+            catalogEditRefreshTextoLabels_();
+            catalogEditRefreshOptionsGroupVisibility_();
+        }
+
+        function catalogEditSetContentKind_(el, kind) {
+            catalogEditApplyContentKindUi_(kind);
+        }
+
+        function catalogEditRefreshOptionsGroupVisibility_() {
+            const og = document.getElementById('catalogPOptionsGroup');
+            if (!og) return;
+            const panel = document.getElementById('catalogEditPanel');
+            const isSheet = panel && panel.classList.contains('catalog-edit-panel--sheet');
+            if (isSheet || (panel && panel.classList.contains('catalog-edit-panel--new'))) {
+                og.style.display = '';
+                return;
+            }
+            const tipo = catalogEditGetSelectedTipo_();
+            og.style.display = tipo === 'option' ? '' : 'none';
+        }
+
+        function catalogEditApplyTipoUi_(type) {
+            const panel = document.getElementById('catalogEditPanel');
+            if (!panel) return;
+            const t = String(type || 'message');
+            const nodeSel = panel.querySelector('.catalog-node-type-selector');
+            if (nodeSel) {
+                nodeSel.querySelectorAll('.type-opt').forEach(function (o) {
+                    o.classList.toggle('active', o.getAttribute('data-type') === t);
+                });
+            }
+            catalogEditRefreshOptionsGroupVisibility_();
+        }
+
+        function catalogEditBuilderLooksEmpty_() {
+            const wrap = document.getElementById('catalogPOptionsBuilder');
+            if (!wrap) return true;
+            let has = false;
+            wrap.querySelectorAll('.opt-row').forEach(function (row) {
+                const kw = row.querySelector('.opt-keyword');
+                const url = row.querySelector('.opt-url');
+                const k = kw ? String(kw.value || '').trim() : '';
+                const u = url ? String(url.value || '').trim() : '';
+                if (k || u) has = true;
+            });
+            return !has;
+        }
+
+        function catalogEditSetTipo_(el, type) {
+            catalogEditApplyTipoUi_(type);
+            if (String(type) === 'option' && catalogEditBuilderLooksEmpty_() && catalogEditState_.initialOptions) {
+                catalogEditFillOptionsFromRaw_(catalogEditState_.initialOptions);
+            }
+        }
+
+        function catalogEditClearOptionsBuilder_() {
+            const wrap = document.getElementById('catalogPOptionsBuilder');
+            if (wrap) wrap.innerHTML = '';
+        }
+
+        function catalogEditAppendOptRow_(kw, url) {
+            const wrap = document.getElementById('catalogPOptionsBuilder');
+            if (!wrap) return;
+            if (wrap.querySelectorAll('.opt-row').length >= CATALOG_MAX_WHATSAPP_MENU_OPTIONS) {
+                showConfigToast_('Máximo ' + CATALOG_MAX_WHATSAPP_MENU_OPTIONS + ' opciones de menú / enlaces (WhatsApp por envío).', 'error');
+                return;
+            }
+            const row = document.createElement('div');
+            row.className = 'opt-row';
+            row.innerHTML = '' +
+                '<div class="opt-row-head" style="justify-content:flex-end">' +
+                    '<button type="button" class="opt-row-remove" title="Quitar">×</button>' +
+                '</div>' +
+                '<div>' +
+                    '<span class="opt-field-hint">Texto de la opción</span>' +
+                    '<input type="text" class="field-input opt-keyword" placeholder="ej. inicio, catálogo, promos" value="">' +
+                '</div>' +
+                '<div>' +
+                    '<span class="opt-field-hint">Enlace</span>' +
+                    '<input type="text" class="field-input opt-url" placeholder="https://google.com/" value="">' +
+                '</div>';
+            const kIn = row.querySelector('.opt-keyword');
+            const uIn = row.querySelector('.opt-url');
+            if (kIn) kIn.value = kw != null ? String(kw) : '';
+            if (uIn) uIn.value = url != null ? String(url) : '';
+            const rm = row.querySelector('.opt-row-remove');
+            if (rm) {
+                rm.addEventListener('click', function () {
+                    row.remove();
+                });
+            }
+            wrap.appendChild(row);
+        }
+
+        function catalogEditFillOptionsFromRaw_(rawStr) {
+            catalogEditClearOptionsBuilder_();
+            let segments = String(rawStr || '').split(/\/{2,}/).map(function (s) { return s.trim(); }).filter(Boolean);
+            if (segments.length > CATALOG_MAX_WHATSAPP_MENU_OPTIONS) {
+                segments = segments.slice(0, CATALOG_MAX_WHATSAPP_MENU_OPTIONS);
+                showConfigToast_('Solo se muestran las primeras ' + CATALOG_MAX_WHATSAPP_MENU_OPTIONS + ' opciones (límite WhatsApp).', 'success');
+            }
+            if (segments.length === 0) {
+                catalogEditAppendOptRow_('', '');
+            } else {
+                segments.forEach(function (seg) {
+                    const p = catalogParseOptionSegment_(seg);
+                    catalogEditAppendOptRow_(p.kw, p.url);
+                });
+            }
+        }
+
+        function catalogEditSerializeOptionsFromDom_() {
+            const wrap = document.getElementById('catalogPOptionsBuilder');
+            if (!wrap) return '';
+            const parts = [];
+            wrap.querySelectorAll('.opt-row').forEach(function (row) {
+                const kw = row.querySelector('.opt-keyword');
+                const url = row.querySelector('.opt-url');
+                const k = kw ? String(kw.value || '').trim() : '';
+                const u = url ? String(url.value || '').trim() : '';
+                if (!k && !u) return;
+                parts.push(u ? (k ? (k + '/' + u) : u) : k);
+            });
+            return parts.join('//');
+        }
+
+        function catalogEditAgregarFilaOpcionBuilder_() {
+            catalogEditAppendOptRow_('', '');
+        }
+
+        function catalogEditTriggerResponseImageInput() {
+            const input = document.getElementById('catalogPResponseImageInput');
+            if (input) input.click();
+        }
+
+        function catalogEditRefreshImagePreview_() {
+            const img = document.getElementById('catalogPResponseImagePreview_');
+            const rm = document.getElementById('catalogPResponseImageRemoveBtn_');
+            const b64 = String(catalogEditState_.imageB64 || '').trim();
+            if (img) {
+                if (b64) {
+                    const src = b64.indexOf('data:image') === 0 ? b64.replace(/\s+/g, '') : ('data:image/jpeg;base64,' + b64.replace(/\s/g, ''));
+                    img.src = src;
+                    img.style.display = 'block';
+                } else {
+                    img.src = '';
+                    img.style.display = 'none';
+                }
+            }
+            if (rm) rm.style.display = b64 ? 'block' : 'none';
+        }
+
+        function catalogEditQuitarImagenRespuesta_() {
+            catalogEditState_.imageB64 = '';
+            const input = document.getElementById('catalogPResponseImageInput');
+            if (input) input.value = '';
+            catalogEditRefreshImagePreview_();
+        }
+
+        async function catalogEditConvertirImagenRespuestaDesdeArchivo_() {
+            const input = document.getElementById('catalogPResponseImageInput');
+            const file = input && input.files && input.files[0] ? input.files[0] : null;
+            if (!file) return;
+            try {
+                const imgEl = await cargarImagenBase64Config_(file);
+                const base64 = await comprimirHastaLimiteConfig_(imgEl, CONFIG_MAX_RESPONSE_IMAGE_CHARS);
+                catalogEditState_.imageB64 = base64;
+                catalogEditRefreshImagePreview_();
+            } catch (e) {
+                console.error('[catalog-edit] imagen', e);
+                showConfigToast_('No se pudo procesar la imagen', 'error');
+            } finally {
+                if (input) input.value = '';
+            }
+        }
+
+        function catalogEditOpenNew_() {
+            if (!getConfigApiUrl()) {
+                showConfigToast_('No hay URL de configuración en la sesión.', 'error');
+                return;
+            }
+            catalogEditState_.isNew = true;
+            catalogEditState_.kind = 'sheet-new';
+            catalogEditState_.nodeId = '';
+            catalogEditState_.rowIndex = -1;
+            catalogEditState_.initialOptions = '';
+            catalogEditState_.imageB64 = '';
+            const panel = document.getElementById('catalogEditPanel');
+            if (panel) {
+                panel.classList.add('catalog-edit-panel--sheet');
+                panel.classList.add('catalog-edit-panel--new');
+            }
+            const h4 = document.getElementById('catalogEditPanelTitle');
+            if (h4) h4.textContent = 'Agregar nuevo';
+            const resEl = document.getElementById('catalogPResponse');
+            if (resEl) resEl.value = '';
+            const nm = document.getElementById('catalogPArticleName');
+            const pr = document.getElementById('catalogPArticlePrice');
+            if (nm) nm.value = '';
+            if (pr) pr.value = '';
+            catalogEditApplyContentKindUi_('articulo');
+            catalogEditApplyTipoUi_('message');
+            catalogEditFillOptionsFromRaw_('');
+            catalogEditQuitarImagenRespuesta_();
+            catalogEditHideMandatoryHint_();
+            catalogEditRefreshOverlay_(true);
+        }
+
+        function catalogEditOpenFlow_(nodeId) {
+            const snapshot = catalogFlowState_.snapshot;
+            const node = catalogFindNodeById_(snapshot, nodeId);
+            if (!node) {
+                showConfigToast_('No se encontró el nodo en el flujo.', 'error');
+                return;
+            }
+            catalogEditState_.isNew = false;
+            catalogEditState_.kind = 'flow';
+            catalogEditState_.nodeId = String(nodeId || '').trim();
+            catalogEditState_.rowIndex = -1;
+            catalogEditState_.initialOptions = String(node.options != null ? node.options : '');
+            catalogEditState_.imageB64 = '';
+
+            const panel = document.getElementById('catalogEditPanel');
+            if (panel) {
+                panel.classList.remove('catalog-edit-panel--sheet');
+                panel.classList.remove('catalog-edit-panel--new');
+            }
+            const h4t = document.getElementById('catalogEditPanelTitle');
+            if (h4t) h4t.textContent = 'Editar Elemento';
+            const parsed = parseConfigResponseWithImage_(String(node.responses || ''));
+            catalogEditState_.imageB64 = String(parsed.imageBase64 || '').trim();
+
+            const ck = String(node.catalogContentKind || '').trim();
+            const artName = String(node.catalogArticleName != null ? node.catalogArticleName : '').trim();
+            const artPrice = String(node.catalogArticlePrice != null ? node.catalogArticlePrice : '').trim();
+
+            const resEl = document.getElementById('catalogPResponse');
+            const rawTxt = String(parsed.text || '').trim();
+            if (resEl) {
+                resEl.value = ck === 'informacion'
+                    ? rawTxt
+                    : catalogExtractDescriptionFromArticuloStored_(rawTxt, artName, artPrice);
+            }
+
+            const nm = document.getElementById('catalogPArticleName');
+            const pr = document.getElementById('catalogPArticlePrice');
+            if (nm) nm.value = artName;
+            if (pr) pr.value = artPrice;
+
+            catalogEditApplyContentKindUi_(ck === 'informacion' ? 'informacion' : 'articulo');
+
+            const allowed = { message: 1, option: 1, start: 1, end: 1 };
+            const rawT = String(node.type || 'message').trim();
+            const tipo = allowed[rawT] ? rawT : 'message';
+            catalogEditApplyTipoUi_(tipo);
+
+            catalogEditFillOptionsFromRaw_(catalogEditState_.initialOptions);
+            catalogEditRefreshImagePreview_();
+            catalogEditHideMandatoryHint_();
+            catalogEditRefreshOverlay_(true);
+        }
+
+        function catalogEditOpenSheet_(rowIndex) {
+            const idx = Number(rowIndex);
+            if (!Array.isArray(configOriginal) || !configOriginal[idx]) {
+                showConfigToast_('Fila de Sheet no disponible.', 'error');
+                return;
+            }
+            const row = configOriginal[idx];
+            catalogEditState_.isNew = false;
+            catalogEditState_.kind = 'sheet';
+            catalogEditState_.nodeId = '';
+            catalogEditState_.rowIndex = idx;
+            catalogEditState_.initialOptions = String(row.options != null ? row.options : '');
+            catalogEditState_.imageB64 = '';
+
+            const panel = document.getElementById('catalogEditPanel');
+            if (panel) {
+                panel.classList.add('catalog-edit-panel--sheet');
+                panel.classList.remove('catalog-edit-panel--new');
+            }
+            const h4s = document.getElementById('catalogEditPanelTitle');
+            if (h4s) h4s.textContent = 'Editar Elemento';
+
+            const parsed = parseConfigResponseWithImage_(String(row.responses || ''));
+            catalogEditState_.imageB64 = String(parsed.imageBase64 || '').trim();
+
+            const metaRow = catalogReadMetaFromRow_(row);
+            const nm = document.getElementById('catalogPArticleName');
+            const pr = document.getElementById('catalogPArticlePrice');
+            if (nm) nm.value = metaRow.catalogArticleName || '';
+            if (pr) pr.value = metaRow.catalogArticlePrice || '';
+
+            const resEl = document.getElementById('catalogPResponse');
+            const rawTxtSheet = String(parsed.text || '').trim();
+            if (resEl) {
+                resEl.value = metaRow.catalogContentKind === 'informacion'
+                    ? rawTxtSheet
+                    : catalogExtractDescriptionFromArticuloStored_(rawTxtSheet, metaRow.catalogArticleName, metaRow.catalogArticlePrice);
+            }
+
+            catalogEditApplyContentKindUi_(metaRow.catalogContentKind);
+
+            catalogEditFillOptionsFromRaw_(catalogEditState_.initialOptions);
+            catalogEditRefreshImagePreview_();
+            catalogEditHideMandatoryHint_();
+            catalogEditRefreshOverlay_(true);
+        }
+
+        function catalogEditAbrirBtn_(btn) {
+            if (!btn) return;
+            const kind = String(btn.getAttribute('data-cat-kind') || '').trim();
+            if (kind === 'flow') {
+                try {
+                    catalogEditOpenFlow_(decodeURIComponent(String(btn.getAttribute('data-cat-id') || '').trim()));
+                } catch (e) {
+                    catalogEditOpenFlow_(String(btn.getAttribute('data-cat-id') || '').trim());
+                }
+            } else if (kind === 'sheet') {
+                const ri = parseInt(btn.getAttribute('data-cat-row'), 10);
+                if (Number.isFinite(ri)) catalogEditOpenSheet_(ri);
+            }
+        }
+
+        function catalogEditCerrarPanel_() {
+            catalogEditRefreshOverlay_(false);
+            catalogEditHideMandatoryHint_();
+            catalogEditState_.isNew = false;
+            catalogEditState_.kind = '';
+            catalogEditState_.nodeId = '';
+            catalogEditState_.rowIndex = -1;
+            catalogEditState_.initialOptions = '';
+            catalogEditState_.imageB64 = '';
+            const panel = document.getElementById('catalogEditPanel');
+            if (panel) panel.classList.remove('catalog-edit-panel--new');
+            const h4 = document.getElementById('catalogEditPanelTitle');
+            if (h4) h4.textContent = 'Editar Elemento';
+        }
+
+        async function catalogAgregarNuevaFilaCatalogo_() {
+            const apiUrl = getConfigApiUrl();
+            if (!apiUrl) throw new Error('Sin URL de configuración.');
+            const resEl = document.getElementById('catalogPResponse');
+            const resText = resEl ? String(resEl.value || '').trim() : '';
+            const img = String(catalogEditState_.imageB64 || '').trim();
+            const optionsStr = catalogEditSerializeOptionsFromDom_();
+            const columnas = catalogGetConfigTableColumnNames_();
+            const kind = catalogEditGetSelectedContentKind_();
+            const nameEl = document.getElementById('catalogPArticleName');
+            const priceEl = document.getElementById('catalogPArticlePrice');
+            const meta = {
+                catalogContentKind: kind,
+                catalogArticleName: kind === 'articulo' && nameEl ? String(nameEl.value || '').trim() : '',
+                catalogArticlePrice: kind === 'articulo' && priceEl ? String(priceEl.value || '').trim() : ''
+            };
+            const bodyText = kind === 'articulo'
+                ? catalogComposeArticuloResponseText_(meta.catalogArticleName, meta.catalogArticlePrice, resText)
+                : resText;
+            const row = {};
+            columnas.forEach(function (col) {
+                const lc = String(col).toLowerCase();
+                if (lc === 'keywords') row[col] = '';
+                else if (lc === 'responses') row[col] = buildConfigResponseWithImage_(bodyText, img);
+                else if (lc === 'options') row[col] = optionsStr;
+                else if (lc === 'api') row[col] = JSON.stringify(meta);
+                else if (lc === 'ia') row[col] = '';
+                else row[col] = '';
+            });
+            const formData = new FormData();
+            formData.append('action', 'add_row');
+            columnas.forEach(function (col) {
+                const v = row[col];
+                formData.append(col, v != null ? String(v) : '');
+            });
+            const res = await fetchWithTimeoutCatalog_(apiUrl, { method: 'POST', body: formData });
+            const txt = await res.text();
+            let data = null;
+            try { data = JSON.parse(txt); } catch (_) {}
+            if (!data || data.success !== true) {
+                throw new Error((data && data.error) || 'No se pudo crear la fila.');
+            }
+        }
+
+        function catalogEditCountFilledOptionsFromDom_() {
+            const wrap = document.getElementById('catalogPOptionsBuilder');
+            if (!wrap) return 0;
+            let n = 0;
+            wrap.querySelectorAll('.opt-row').forEach(function (row) {
+                const kw = row.querySelector('.opt-keyword');
+                const url = row.querySelector('.opt-url');
+                const k = kw ? String(kw.value || '').trim() : '';
+                const u = url ? String(url.value || '').trim() : '';
+                if (k || u) n++;
+            });
+            return n;
+        }
+
+        async function catalogEditGuardar_() {
+            catalogEditHideMandatoryHint_();
+            const resEl = document.getElementById('catalogPResponse');
+            const resText = resEl ? String(resEl.value || '').trim() : '';
+            const img = String(catalogEditState_.imageB64 || '').trim();
+
+            try {
+                if (catalogEditState_.isNew) {
+                    const nOpt = catalogEditCountFilledOptionsFromDom_();
+                    if (nOpt > CATALOG_MAX_WHATSAPP_MENU_OPTIONS) {
+                        const msg = 'Como máximo ' + CATALOG_MAX_WHATSAPP_MENU_OPTIONS + ' opciones de menú / enlaces (límite de WhatsApp por envío).';
+                        catalogEditShowMandatoryHint_(msg);
+                        showConfigToast_(msg, 'error');
+                        return;
+                    }
+                    catalogShowSavingModal_('Guardando…', 'Creando ítem en el catálogo…');
+                    try {
+                        await catalogAgregarNuevaFilaCatalogo_();
+                    } finally {
+                        catalogHideSavingModal_();
+                    }
+                    showConfigToast_('Ítem agregado', 'success');
+                    catalogEditCerrarPanel_();
+                    await cargarCatalogoDesdeConfig_({ overlayMessage: 'Actualizando lista…' });
+                    return;
+                }
+
+                if (catalogEditState_.kind === 'flow') {
+                    const snapshot = catalogFlowState_.snapshot;
+                    const node = catalogFindNodeById_(snapshot, catalogEditState_.nodeId);
+                    if (!node) throw new Error('Nodo no encontrado.');
+                    const tipo = catalogEditGetSelectedTipo_();
+                    const kind = catalogEditGetSelectedContentKind_();
+                    node.catalogContentKind = kind;
+                    node.type = tipo;
+                    node.keywords = '';
+                    if ('keyword' in node) node.keyword = '';
+                    const nameEl = document.getElementById('catalogPArticleName');
+                    const priceEl = document.getElementById('catalogPArticlePrice');
+                    let artName = '';
+                    let artPrice = '';
+                    if (kind === 'articulo') {
+                        artName = nameEl ? String(nameEl.value || '').trim() : '';
+                        artPrice = priceEl ? String(priceEl.value || '').trim() : '';
+                        node.catalogArticleName = artName;
+                        node.catalogArticlePrice = artPrice;
+                    } else {
+                        node.catalogArticleName = '';
+                        node.catalogArticlePrice = '';
+                    }
+                    const bodyText = kind === 'articulo'
+                        ? catalogComposeArticuloResponseText_(artName, artPrice, resText)
+                        : resText;
+                    node.responses = buildConfigResponseWithImage_(bodyText, img);
+                    node.responsesText = bodyText;
+                    node.imageBase64 = img || '';
+                    if (tipo === 'option') {
+                        const nOpt = catalogEditCountFilledOptionsFromDom_();
+                        if (nOpt > CATALOG_MAX_WHATSAPP_MENU_OPTIONS) {
+                            const msg = 'Como máximo ' + CATALOG_MAX_WHATSAPP_MENU_OPTIONS + ' opciones de menú / enlaces (límite de WhatsApp por envío).';
+                            catalogEditShowMandatoryHint_(msg);
+                            showConfigToast_(msg, 'error');
+                            return;
+                        }
+                        node.options = catalogEditSerializeOptionsFromDom_();
+                    } else {
+                        node.options = catalogEditState_.initialOptions;
+                    }
+                    catalogShowSavingModal_('Guardando…', 'Sincronizando con el servidor…');
+                    try {
+                        await guardarSnapshotCatalogoEnApi_();
+                        showConfigToast_('Nodo de catálogo guardado', 'success');
+                    } finally {
+                        catalogHideSavingModal_();
+                    }
+                    catalogEditCerrarPanel_();
+                    renderCatalogNodes_();
+                    return;
+                }
+
+                if (catalogEditState_.kind === 'sheet') {
+                    const idx = Number(catalogEditState_.rowIndex);
+                    if (!(idx >= 0) || !Array.isArray(configOriginal) || !configOriginal[idx]) {
+                        throw new Error('Fila inválida.');
+                    }
+                    const row = Object.assign({}, configOriginal[idx]);
+                    row.keywords = '';
+                    const kind = catalogEditGetSelectedContentKind_();
+                    const nameEl = document.getElementById('catalogPArticleName');
+                    const priceEl = document.getElementById('catalogPArticlePrice');
+                    const m = catalogReadMetaFromRow_(row);
+                    m.catalogContentKind = kind;
+                    if (kind === 'articulo') {
+                        m.catalogArticleName = nameEl ? String(nameEl.value || '').trim() : '';
+                        m.catalogArticlePrice = priceEl ? String(priceEl.value || '').trim() : '';
+                    } else {
+                        m.catalogArticleName = '';
+                        m.catalogArticlePrice = '';
+                    }
+                    catalogWriteMetaToRow_(row, m);
+                    const bodyTextSheet = kind === 'articulo'
+                        ? catalogComposeArticuloResponseText_(m.catalogArticleName, m.catalogArticlePrice, resText)
+                        : resText;
+                    row.responses = buildConfigResponseWithImage_(bodyTextSheet, img);
+                    const nOptSheet = catalogEditCountFilledOptionsFromDom_();
+                    if (nOptSheet > CATALOG_MAX_WHATSAPP_MENU_OPTIONS) {
+                        const msg = 'Como máximo ' + CATALOG_MAX_WHATSAPP_MENU_OPTIONS + ' opciones de menú / enlaces (límite de WhatsApp por envío).';
+                        catalogEditShowMandatoryHint_(msg);
+                        showConfigToast_(msg, 'error');
+                        return;
+                    }
+                    row.options = catalogEditSerializeOptionsFromDom_();
+                    catalogShowSavingModal_('Guardando…', 'Sincronizando con el servidor…');
+                    try {
+                        await guardarCatalogoSheetRow_(idx, row);
+                        showConfigToast_('Fila de catálogo guardada', 'success');
+                    } finally {
+                        catalogHideSavingModal_();
+                    }
+                    catalogEditCerrarPanel_();
+                    renderCatalogNodes_();
+                    return;
+                }
+            } catch (e) {
+                console.error('[catalog-edit] guardar', e);
+                const msg = e && e.message ? String(e.message) : 'No se pudo guardar.';
+                catalogEditShowMandatoryHint_(msg);
+                showConfigToast_(msg, 'error');
+            }
+        }
+
+        function catalogKindLabel_(kind) {
+            var k = String(kind == null ? '' : kind).trim();
+            if (k === 'informacion') return 'Información';
+            return 'Producto';
+        }
+
+        function renderCatalogNodes_() {
+            const wrap = document.getElementById('catalogNodesList');
+            if (!wrap) return;
+            const snapshot = catalogFlowState_.snapshot;
+            const flowNodes = getCatalogNodesFromSnapshot_(snapshot);
+            const sheetRows = collectCatalogSheetRows_(configOriginal);
+            const total = flowNodes.length + sheetRows.length;
+            if (!total) {
+                wrap.innerHTML = '<div class="ctx-empty">No hay ítems de catálogo: nodos del flujo sin palabra clave, o filas del Sheet con keywords vacío (fuera de __flow_json__).</div>';
+                return;
+            }
+            const htmlFlow = flowNodes.map(function (node, idx) {
+                const ck = String(node.catalogContentKind || '').trim();
+                const artNm = String(node.catalogArticleName != null ? node.catalogArticleName : '').trim();
+                const fromText = String(node.responsesText || parseConfigResponseWithImage_(node.responses || '').text || '').trim();
+                const titleBase = (ck === 'articulo' && artNm) ? artNm : fromText;
+                const nodeId = String(node.id || ('catalog_node_' + idx));
+                const typeLbl = String(node.type || 'nodo').trim();
+                const title = titleBase || (typeLbl + ' · ' + nodeId);
+                const img = catalogExtractFlowNodeImage_(snapshot, node, 0, []) ||
+                    catalogNormalizeImageSrc_(snapshot, String(node.imageBase64 || '').trim());
+                return '' +
+                    '<article class="ctx-item">' +
+                        '<div class="ctx-item-head">' +
+                            '<span class="ctx-item-title">' + escapeHtml(title.slice(0, 80)) + '</span>' +
+                            '<span class="ctx-tag" title="Nodo del flujo sin keyword">Flujo</span>' +
+                        '</div>' +
+                        '<div class="ctx-item-desc">' + escapeHtml(catalogKindLabel_(ck)) + '</div>' +
+                        '<div class="ctx-preview"><div class="ctx-preview-in">' + (img ? '<img src="' + escapeHtml(img) + '" alt="Imagen del catálogo">' : 'Sin imagen') + '</div></div>' +
+                        '<div class="ctx-item-actions">' +
+                            '<button class="ctx-item-btn" type="button" onclick="catalogEditAbrirBtn_(this)" data-cat-kind="flow" data-cat-id="' + encodeURIComponent(String(nodeId)) + '">Editar</button>' +
+                        '</div>' +
+                    '</article>';
+            });
+            const htmlSheet = sheetRows.map(function (item) {
+                const row = item.row || {};
+                const ri = item.rowIndex;
+                const parsed = parseConfigResponseWithImage_(String(row.responses || ''));
+                const meta = catalogReadMetaFromRow_(row);
+                const fromText = String(parsed.text || '').trim();
+                const titleBase = (meta.catalogContentKind === 'articulo' && meta.catalogArticleName)
+                    ? meta.catalogArticleName
+                    : fromText;
+                const title = titleBase || ('Fila Sheet #' + ri);
+                let img = '';
+                if (parsed.imageBase64 && String(parsed.imageBase64).trim()) {
+                    const ib = String(parsed.imageBase64).trim();
+                    img = ib.indexOf('data:image') === 0 ? ib.replace(/\s+/g, '') : ('data:image/jpeg;base64,' + ib.replace(/\s/g, ''));
+                }
+                return '' +
+                    '<article class="ctx-item">' +
+                        '<div class="ctx-item-head">' +
+                            '<span class="ctx-item-title">' + escapeHtml(title.slice(0, 80)) + '</span>' +
+                            '<span class="ctx-tag ctx-tag--active" title="Ítem activo en la configuración del bot">Activo</span>' +
+                        '</div>' +
+                        '<div class="ctx-item-desc">' + escapeHtml(catalogKindLabel_(meta.catalogContentKind)) + '</div>' +
+                        '<div class="ctx-preview"><div class="ctx-preview-in">' + (img ? '<img src="' + escapeHtml(img) + '" alt="Imagen del catálogo">' : 'Sin imagen') + '</div></div>' +
+                        '<div class="ctx-item-actions">' +
+                            '<button class="ctx-item-btn" type="button" onclick="catalogEditAbrirBtn_(this)" data-cat-kind="sheet" data-cat-row="' + ri + '">Editar</button>' +
+                        '</div>' +
+                    '</article>';
+            });
+            wrap.innerHTML = htmlFlow.concat(htmlSheet).join('');
+        }
+
+        async function guardarCatalogoSheetRow_(rowIndex, row) {
+            if (!getConfigApiUrl()) throw new Error('Sin URL de configuración en sesión. Iniciá sesión de nuevo.');
+            const idx = Number(rowIndex);
+            if (!(idx >= 0) || !row || typeof row !== 'object') throw new Error('Fila de Sheet inválida.');
+            const formData = new FormData();
+            formData.append('action', 'update_row');
+            formData.append('row_index', String(idx));
+            ['keywords', 'responses', 'options', 'api', 'ia'].forEach(function (col) {
+                if (row[col] !== undefined) formData.append(col, String(row[col] == null ? '' : row[col]));
+            });
+            const res = await fetchWithTimeoutCatalog_(getConfigApiUrl(), { method: 'POST', body: formData });
+            const txt = await res.text();
+            let data = null;
+            try { data = JSON.parse(txt); } catch (_) {}
+            if (!data || data.success !== true) {
+                throw new Error((data && data.error) || 'No se pudo guardar la fila del catálogo.');
+            }
+            if (Array.isArray(configOriginal) && configOriginal[idx]) {
+                Object.assign(configOriginal[idx], row);
+            }
+        }
+
+        async function guardarSnapshotCatalogoEnApi_() {
+            if (!getConfigApiUrl()) throw new Error('Sin URL de configuración en sesión. Iniciá sesión de nuevo.');
+            const idx = Number(catalogFlowState_.rowIndex);
+            const field = String(catalogFlowState_.rowField || '').trim();
+            const row = catalogFlowState_.rowData || {};
+            if (!(idx >= 0) || !field) throw new Error('No se encontró fila técnica del snapshot para guardar.');
+            const snapshot = catalogFlowState_.snapshot || { nodes: [], connections: [], connectionsByRow: [] };
+            const formData = new FormData();
+            formData.append('action', 'update_row');
+            formData.append('row_index', String(idx));
+
+            const payload = Object.assign({}, row);
+            payload[field] = JSON.stringify(snapshot);
+            const editableCols = ['keywords', 'responses', 'options', 'api', 'flow', 'flujo', 'flow_json', 'json', 'template', 'plantilla', 'data', 'prompt'];
+            editableCols.forEach(function (col) {
+                if (payload[col] !== undefined) formData.append(col, String(payload[col] == null ? '' : payload[col]));
+            });
+            if (!formData.has('keywords')) formData.append('keywords', String(row.keywords || '__flow_json__'));
+            if (!formData.has('responses')) formData.append('responses', String(payload.responses || ''));
+            if (!formData.has('options')) formData.append('options', String(payload.options || ''));
+
+            const res = await fetchWithTimeoutCatalog_(getConfigApiUrl(), { method: 'POST', body: formData });
+            const txt = await res.text();
+            let data = null;
+            try { data = JSON.parse(txt); } catch (_) {}
+            if (!data || data.success !== true) {
+                throw new Error((data && data.error) || 'No se pudo guardar snapshot de catálogo.');
+            }
+            if (Array.isArray(configOriginal) && configOriginal[idx]) {
+                configOriginal[idx][field] = payload[field];
+            }
+        }
+
+        function catalogShowSavingModal_(title, sub) {
+            const m = document.getElementById('catalogSavingModal');
+            const t = document.getElementById('catalogSavingModalTitle');
+            const s = document.getElementById('catalogSavingModalSub');
+            if (t) t.textContent = title || 'Guardando…';
+            if (s) s.textContent = sub || 'Sincronizando con el servidor…';
+            if (m) m.style.display = 'flex';
+        }
+
+        function catalogHideSavingModal_() {
+            const m = document.getElementById('catalogSavingModal');
+            if (m) m.style.display = 'none';
+        }
+
+        function catalogShowListLoadOverlay_(visible, message) {
+            const o = document.getElementById('catalogListLoadOverlay');
+            const tx = document.getElementById('catalogListLoadOverlayText');
+            if (tx && message) tx.textContent = message;
+            if (o) {
+                o.classList.toggle('is-visible', !!visible);
+                o.setAttribute('aria-hidden', visible ? 'false' : 'true');
+            }
+        }
+
+        async function cargarCatalogoDesdeConfig_(opts) {
+            opts = opts || {};
+            const overlayMsg = opts.overlayMessage != null ? String(opts.overlayMessage) : 'Actualizando catálogo…';
+            const wrap = document.getElementById('catalogNodesList');
+            const apiCat = getConfigApiUrl();
+            const previousHtml = wrap ? wrap.innerHTML : '';
+
+            if (!apiCat) {
+                if (wrap) wrap.innerHTML = '<div class="ctx-empty">Sin URL de API en la sesión. Cerrá sesión y volvé a entrar.</div>';
+                return;
+            }
+
+            catalogShowListLoadOverlay_(true, overlayMsg);
+            try {
+                const response = await fetchWithTimeoutCatalog_(apiCat + '?action=get_config&_t=' + Date.now(), { cache: 'no-store' });
+                const data = JSON.parse(await response.text());
+                const rows = Array.isArray(data && data.config) ? data.config : [];
+                configOriginal = JSON.parse(JSON.stringify(rows));
+
+                const saveTarget = extractFlowSnapshotFromConfigRows_(rows);
+                const mergedFb = mergeAllFlowSnapshotsFromConfigForCatalog_(rows);
+
+                let snapshot = null;
+                try {
+                    montarFlowEditorInline_(false);
+                    await _llamarFlowEditorFn_('cargarDesdeSheet', [{ silent: true, source: 'catalog', applyVisual: false }]);
+                    await new Promise(function (r) { setTimeout(r, 200); });
+                    const ed = await _llamarFlowEditorFn_('buildFlowSnapshotObjectForPersistence_', []);
+                    if (ed && typeof ed === 'object' && Array.isArray(ed.nodes)) {
+                        snapshot = ed;
+                    }
+                } catch (err) {
+                    console.warn('[catalog] buildFlowSnapshotObjectForPersistence_', err);
+                }
+
+                if (!snapshot) {
+                    if (mergedFb && mergedFb.snapshot) {
+                        snapshot = Object.assign({}, mergedFb.snapshot);
+                    } else if (saveTarget && saveTarget.snapshot) {
+                        snapshot = Object.assign({}, saveTarget.snapshot);
+                    }
+                }
+
+                if (!snapshot || !Array.isArray(snapshot.nodes)) {
+                    catalogFlowState_ = { snapshot: null, rowIndex: -1, rowField: '', rowData: null };
+                    if (wrap) {
+                        wrap.innerHTML = '<div class="ctx-empty">No hay flujo legible. Entrá a Configuración → Editor de flujo, esperá que cargue, y volvé al catálogo.</div>';
+                    }
+                    return;
+                }
+
+                const rowIndex = saveTarget ? saveTarget.rowIndex : (mergedFb ? mergedFb.rowIndex : -1);
+                const rowField = saveTarget ? saveTarget.rowField : (mergedFb ? mergedFb.rowField : '');
+                const rowData = saveTarget ? saveTarget.rowData : (mergedFb ? mergedFb.rowData : null);
+
+                catalogFlowState_ = {
+                    snapshot: Object.assign({}, snapshot, {
+                        nodes: snapshot.nodes,
+                        connections: Array.isArray(snapshot.connections) ? snapshot.connections : [],
+                        connectionsByRow: Array.isArray(snapshot.connectionsByRow) ? snapshot.connectionsByRow : []
+                    }),
+                    rowIndex: rowIndex,
+                    rowField: rowField,
+                    rowData: rowData
+                };
+
+                renderCatalogNodes_();
+            } catch (e) {
+                console.error('[catalog] load error', e);
+                if (wrap) {
+                    if (previousHtml) {
+                        wrap.innerHTML = previousHtml;
+                    } else {
+                        wrap.innerHTML = '<div class="ctx-empty">Error al cargar catálogo.</div>';
+                    }
+                }
+            } finally {
+                catalogShowListLoadOverlay_(false);
+            }
         }
 
         function actualizarMiniaturaRespuestaFila_(rowEl) {
@@ -6943,6 +8945,8 @@
             document.getElementById('statsArea').style.display = 'none';
             const storeAreaMsg = document.getElementById('storeArea');
             if (storeAreaMsg) storeAreaMsg.style.display = 'none';
+            const catalogAreaMsg = document.getElementById('catalogArea');
+            if (catalogAreaMsg) catalogAreaMsg.style.display = 'none';
             if (welcomeArea) welcomeArea.style.display = 'flex';
             
             // Actualizar iconos activos
@@ -6984,6 +8988,8 @@
             statsArea.style.display = 'flex';
             const storeAreaEst = document.getElementById('storeArea');
             if (storeAreaEst) storeAreaEst.style.display = 'none';
+            const catalogAreaEst = document.getElementById('catalogArea');
+            if (catalogAreaEst) catalogAreaEst.style.display = 'none';
             if (welcomeArea) welcomeArea.style.display = 'none';
             
             // Actualizar iconos activos
@@ -7051,11 +9057,16 @@
             try {
                 const obj = JSON.parse(txt);
                 if (!obj || !Array.isArray(obj.nodes)) return null;
-                return {
+                const out = {
                     nodes: Array.isArray(obj.nodes) ? obj.nodes : [],
                     connections: Array.isArray(obj.connections) ? obj.connections : [],
                     connectionsByRow: Array.isArray(obj.connectionsByRow) ? obj.connectionsByRow : []
                 };
+                Object.keys(obj).forEach(function (key) {
+                    if (key === 'nodes' || key === 'connections' || key === 'connectionsByRow') return;
+                    out[key] = obj[key];
+                });
+                return out;
             } catch (e) {
                 return null;
             }
@@ -7588,6 +9599,7 @@
             const configArea = document.getElementById('configArea');
             const statsArea = document.getElementById('statsArea');
             const storeArea = document.getElementById('storeArea');
+            const catalogArea = document.getElementById('catalogArea');
             const welcomeArea = document.getElementById('welcomeArea');
             const chatsSidebar = document.querySelector('.chats-sidebar');
             const isMobile = window.innerWidth <= 768;
@@ -7606,6 +9618,7 @@
             if (configArea) configArea.style.display = 'none';
             if (statsArea) statsArea.style.display = 'none';
             if (welcomeArea) welcomeArea.style.display = 'none';
+            if (catalogArea) catalogArea.style.display = 'none';
             if (storeArea) storeArea.style.display = 'flex';
 
             document.querySelectorAll('.nav-icon').forEach(icon => icon.classList.remove('active'));
@@ -7619,6 +9632,44 @@
                 if (!storeEl || storeEl.style.display === 'none') return;
                 if (storeAgentsCatalogCache) renderStoreAgentsGrid_(storeAgentsCatalogCache);
             });
+        }
+
+        function mostrarVistaCatalogo() {
+            const chatArea = document.getElementById('chatArea');
+            const configArea = document.getElementById('configArea');
+            const statsArea = document.getElementById('statsArea');
+            const storeArea = document.getElementById('storeArea');
+            const catalogArea = document.getElementById('catalogArea');
+            const welcomeArea = document.getElementById('welcomeArea');
+            const chatsSidebar = document.querySelector('.chats-sidebar');
+            const configOverlay = document.getElementById('configMobileOverlay');
+            const isMobile = window.innerWidth <= 768;
+
+            if (isMobile) {
+                if (chatsSidebar) chatsSidebar.style.display = 'none';
+                if (chatArea) {
+                    chatArea.classList.remove('active');
+                    chatArea.style.display = 'none';
+                }
+                if (configOverlay) configOverlay.style.display = 'none';
+            } else if (chatArea) {
+                chatArea.style.display = 'none';
+                if (configOverlay) configOverlay.style.display = 'none';
+            }
+
+            const topHeader = document.querySelector('.top-header');
+            if (topHeader) topHeader.classList.remove('hidden');
+
+            if (configArea) configArea.style.display = 'none';
+            if (statsArea) statsArea.style.display = 'none';
+            if (storeArea) storeArea.style.display = 'none';
+            if (welcomeArea) welcomeArea.style.display = 'none';
+            if (catalogArea) catalogArea.style.display = 'flex';
+
+            document.querySelectorAll('.nav-icon').forEach(icon => icon.classList.remove('active'));
+            const navCatalogoEl = document.getElementById('navCatalogo');
+            if (navCatalogoEl) navCatalogoEl.classList.add('active');
+            cargarCatalogoDesdeConfig_();
         }
 
         function cargarEstadisticas() {
@@ -7743,6 +9794,8 @@
             statsArea.style.display = 'none';
             const storeAreaCfg = document.getElementById('storeArea');
             if (storeAreaCfg) storeAreaCfg.style.display = 'none';
+            const catalogAreaCfg = document.getElementById('catalogArea');
+            if (catalogAreaCfg) catalogAreaCfg.style.display = 'none';
             if (welcomeArea) welcomeArea.style.display = 'none';
             
             // Actualizar iconos activos
@@ -7780,6 +9833,20 @@
             const container = document.getElementById('configTableContainer');
             const loading = document.getElementById('configLoading');
             const silent = opts.silent === true;
+
+            const apiBase = getConfigApiUrl();
+            if (!apiBase) {
+                console.warn('[config] Sin configApiUrl en sesión (solo login).');
+                if (!silent && loading && container) {
+                    loading.style.display = 'none';
+                    loading.classList.remove('config-fade-in', 'config-fade-out');
+                    container.style.display = 'block';
+                }
+                if (typeof showConfigToast_ === 'function') {
+                    showConfigToast_('No hay URL de API en la sesión. Cerrá sesión y entrá de nuevo.', 'error');
+                }
+                return;
+            }
             
             if (!silent) {
                 loading.classList.remove('config-fade-out');
@@ -7788,7 +9855,7 @@
                 container.style.display = 'none';
             }
 
-            fetch(getConfigApiUrl() + '?action=get_config')
+            fetch(apiBase + '?action=get_config')
                 .then(response => response.text())
                 .then(text => {
                     let data;
@@ -8031,7 +10098,11 @@
             out = out.replace(/parent\.postMessage\(/g, 'window.FlowEditorParent.postMessage(');
             out = out.replace(
                 /<\/style>/i,
-                '.workspace{min-height:0}.canvas-area{min-width:0}.edit-panel{height:100%;min-height:0;overflow:hidden}.panel-body{min-height:0}.panel-footer{flex-shrink:0;position:sticky;bottom:0;background:var(--surface)}\n</style>'
+                '.workspace{min-height:0;scrollbar-width:none;-ms-overflow-style:none}.workspace::-webkit-scrollbar{display:none;width:0;height:0}' +
+                    '.canvas-area{min-width:0;scrollbar-width:none;-ms-overflow-style:none}.canvas-area::-webkit-scrollbar{display:none;width:0;height:0}' +
+                    '.edit-panel{height:100%;min-height:0;overflow:hidden}' +
+                    '.panel-body{min-height:0;scrollbar-width:none;-ms-overflow-style:none}.panel-body::-webkit-scrollbar{display:none;width:0;height:0}' +
+                    '.panel-footer{flex-shrink:0;position:sticky;bottom:0;background:var(--surface)}\n</style>'
             );
 
             [
@@ -8363,6 +10434,8 @@
                 'cargarDesdeSheet',
                 'importarFlujo',
                 'exportarFlujo',
+                /** Misma copia de nodos/JSON que usa el editor al guardar (catálogo = esto). */
+                'buildFlowSnapshotObjectForPersistence_',
                 'guardarEnSheet',
                 'agregarNodo',
                 'limpiarEditor',
@@ -8862,6 +10935,13 @@
         
         function guardarCambiosConfiguracion(filasNuevas, filasModificadas, filasEliminadas, columnas, mode = 'manual') {
             const isAuto = mode === 'auto';
+            if (!getConfigApiUrl()) {
+                if (!isAuto) {
+                    setConfigSavingState_(false);
+                    showConfigToast_('No hay URL de configuración en la sesión. Volvé a iniciar sesión.', 'error');
+                }
+                return;
+            }
             let cambiosPendientes = filasNuevas.length + filasModificadas.length + filasEliminadas.length;
             let cambiosCompletados = 0;
             let errores = [];
